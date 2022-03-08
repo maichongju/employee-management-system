@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model departments {
+  department_id  Int        @id @default(autoincrement()) @db.UnsignedInt
+  deparment_name String     @default("") @db.Char(50)
+  employee       employee[]
+}
+
+model employee {
+  employee_id    Int         @id @default(autoincrement()) @db.UnsignedInt
+  last_name      String      @default("") @db.Char(20)
+  first_name     String      @db.Char(20)
+  email          String?     @db.Char(50)
+  phone_number   String?     @db.Char(50)
+  hire_date      DateTime    @db.Date
+  job_id         Int         @default(0) @db.UnsignedInt
+  manager_id     Int?        @db.UnsignedInt
+  department_id  Int         @default(0) @db.UnsignedInt
+  departments    departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_departments")
+  jobs           jobs        @relation(fields: [job_id], references: [job_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_jobs")
+  employee       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_employee")
+  other_employee employee[]  @relation("employeeToemployee_manager_id")
+
+  @@index([department_id], map: "FK_employee_departments")
+  @@index([manager_id], map: "FK_employee_employee")
+  @@index([job_id], map: "FK_employee_jobs")
+}
+
+model jobs {
+  job_id    Int        @id @default(autoincrement()) @db.UnsignedInt
+  job_title String     @default("") @db.Char(100)
+  employee  employee[]
+}
