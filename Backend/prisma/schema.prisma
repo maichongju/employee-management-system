@@ -8,33 +8,82 @@ datasource db {
 }
 
 model departments {
-  department_id  Int        @id @default(autoincrement()) @db.UnsignedInt
-  deparment_name String     @default("") @db.Char(50)
-  employee       employee[]
+  department_id   Int        @id @default(autoincrement()) @db.UnsignedInt
+  department_name String     @default("") @db.Char(50)
+  employee        employee[]
 }
 
 model employee {
-  employee_id    Int         @id @default(autoincrement()) @db.UnsignedInt
-  last_name      String      @default("") @db.Char(20)
-  first_name     String      @db.Char(20)
-  email          String?     @db.Char(50)
-  phone_number   String?     @db.Char(50)
-  hire_date      DateTime    @db.Date
-  job_id         Int         @default(0) @db.UnsignedInt
-  manager_id     Int?        @db.UnsignedInt
-  department_id  Int         @default(0) @db.UnsignedInt
-  departments    departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_departments")
-  jobs           jobs        @relation(fields: [job_id], references: [job_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_jobs")
-  employee       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_employee")
-  other_employee employee[]  @relation("employeeToemployee_manager_id")
+  employee_id   Int         @id @default(autoincrement()) @db.UnsignedInt
+  last_name     String      @default("") @db.Char(20)
+  first_name    String      @db.Char(20)
+  email         String?     @db.Char(50)
+  phone_number  String?     @db.Char(50)
+  hire_date     DateTime    @db.Date
+  job_id        Int         @default(0) @db.UnsignedInt
+  manager_id    Int?        @db.UnsignedInt
+  department_id Int         @default(0) @db.UnsignedInt
+  store_id      Int         @db.UnsignedInt
+  departments   departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_departments")
+  jobs          jobs        @relation(fields: [job_id], references: [job_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_jobs")
+  manager       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_employee")
+  store         store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_store")
+  other_manager employee[]  @relation("employeeToemployee_manager_id")
 
   @@index([department_id], map: "FK_employee_departments")
   @@index([manager_id], map: "FK_employee_employee")
   @@index([job_id], map: "FK_employee_jobs")
+  @@index([store_id], map: "FK_employee_store")
 }
 
 model jobs {
   job_id    Int        @id @default(autoincrement()) @db.UnsignedInt
   job_title String     @default("") @db.Char(100)
   employee  employee[]
+}
+
+model city {
+  city_id     String   @id @default("") @db.Char(50)
+  name        String   @db.Char(50)
+  province_id String   @db.Char(5)
+  province    province @relation(fields: [province_id], references: [province_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_city_province")
+  store       store[]
+
+  @@index([province_id], map: "FK_city_province")
+}
+
+model country {
+  country_id String     @id @db.Char(5)
+  name       String     @db.Char(20)
+  province   province[]
+  store      store[]
+}
+
+model province {
+  province_id String  @default("") @db.Char(5)
+  country_id  String  @db.Char(5)
+  name        String  @db.Char(20)
+  country     country @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_province_country")
+  city        city[]
+  store       store[]
+
+  @@id([province_id, country_id])
+  @@index([country_id], map: "FK_province_country")
+}
+
+model store {
+  store_id    Int        @id @default(autoincrement()) @db.UnsignedInt
+  address     String     @db.TinyText
+  city_id     String     @db.Char(50)
+  province_id String     @db.Char(5)
+  country_id  String     @db.Char(5)
+  post_code   String     @db.Char(10)
+  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
+  country     country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_country")
+  province    province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_province")
+  employee    employee[]
+
+  @@index([city_id], map: "FK_store_city")
+  @@index([country_id], map: "FK_store_country")
+  @@index([province_id], map: "FK_store_province")
 }
