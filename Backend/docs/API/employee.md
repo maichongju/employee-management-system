@@ -13,7 +13,7 @@ Return the employee that match the given criteria.
 **UTL Parameters**:
 
 - **Optional**
-  - <del>`employee_id`: Employee ID </del> Use [(`/employee/:id`](#get-employee-detail) instead
+  - <del>`employee_id`: Employee ID </del> Use [`/employee/:id`](#get-employee-detail) instead
   - `last_name`: Employee last name
   - `first_name`: Employee first name
   - `email`: Employee email
