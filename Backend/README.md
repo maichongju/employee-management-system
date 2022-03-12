@@ -11,8 +11,8 @@
 
 ## Start
 
-- `npm start` to start the server.
-- `npm start-dev` to start the server in development mode. It use `nodemon` for instance restart.
+- `npm run start` to start the server.
+- `npm run start-dev` to start the server in development mode. It use `nodemon` for instance restart.
 
 ### Database
 
