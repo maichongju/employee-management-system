@@ -21,9 +21,9 @@ router.get("/:id", async (req, res, next) => {
       employee_id: id,
     },
     include: {
-      departments: true,
+      department: true,
       store: true,
-      jobs: true,
+      job: true,
       manager: true,
     },
   });
@@ -71,9 +71,9 @@ router.get("/", async (req, res, next) => {
         ...param,
       },
       include: {
-        departments: true,
+        department: true,
         store: true,
-        jobs: true,
+        job: true,
         manager: true,
       },
     });

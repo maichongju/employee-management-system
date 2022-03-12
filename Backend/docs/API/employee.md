@@ -1,7 +1,4 @@
 # Employee
-
-> Sample `employee` object can be found [end of the page](#employee-1)
-
 ## Get Employees list
 
 Return the employee that match the given criteria.
@@ -34,10 +31,45 @@ Code: `200 OK`
 {
   "status": 200,
   "timestamp": "2022-03-09T04:37:47.737Z",
-  "content": [{employee},...,{employee}]
+  "content": [{
+      "employee_id": 1000000,
+      "last_name": "rocky",
+      "first_name": "conner",
+      "email": "test@mail.com",
+      "phone_number": "123456789",
+      "hire_date": "2022-03-07T00:00:00.000Z",
+      "job_id": 1000000,
+      "manager_id": null,
+      "department_id": 1,
+      "store_id": 1,
+      "departments": {
+        "department_id": 1,
+        "department_name": "tech"
+      },
+      "store": {
+        "store_id": 1,
+        "address": "123 some address",
+        "city_id": "LONDON_CA",
+        "province_id": "ON",
+        "country_id": "CA",
+        "post_code": "XXXXXX"
+      },
+      "jobs": {
+        "job_id": 1000000,
+        "job_title": "cashier"
+      },
+      "manager": null
+    },...
+    ]
 }
 
 ```
+
+Field Description:
+
+- `status` HTTP status code
+- `timestamp`: timestamp of the response (YY-MM-DDTHH:MM:SS.SSSZ)
+- `content`: list of [employee](#employee-1) object. Empty if no matching found
 
 **Error Response**:
 
@@ -180,9 +212,54 @@ Code: `200 OK`
 {
   "status": 200,
   "timestamp": "2022-03-09T00:40:41.981Z",
-  "content": null or {employee}
+  "content": {
+    "employee_id": 1000001,
+    "last_name": "karla",
+    "first_name": "allison",
+    "email": "example@example.com",
+    "phone_number": "123456779",
+    "hire_date": "2022-03-08T00:00:00.000Z",
+    "job_id": 1000000,
+    "manager_id": 1000000,
+    "department_id": 2,
+    "store_id": 1,
+    "departments": {
+      "department_id": 2,
+      "department_name": "shoes"
+    },
+    "store": {
+      "store_id": 1,
+      "address": "123 some address",
+      "city_id": "London",
+      "province_id": "ON",
+      "country_id": "CA",
+      "post_code": "XXXXXX"
+    },
+    "jobs": {
+      "job_id": 1000000,
+      "job_title": "cashier"
+    },
+    "manager": {
+      "employee_id": 1000000,
+      "last_name": "rocky",
+      "first_name": "conner",
+      "email": "test@mail.com",
+      "phone_number": "123456789",
+      "hire_date": "2022-03-07T00:00:00.000Z",
+      "job_id": 1000000,
+      "manager_id": null,
+      "department_id": 1,
+      "store_id": 1
+    }
+  }
 }
 ```
+
+Field Description:
+
+- `status` HTTP status code
+- `timestamp`: timestamp of the response (YY-MM-DDTHH:MM:SS.SSSZ)
+- `content`: [employee](#employee-1) object. `null` if there is no matching employee
 
 ### Error Response
 
@@ -255,7 +332,46 @@ Get employ with employee ID 1000 where it does not exist
 }
 ```
 
-## `employee`
+## `employee` Object
+
+Field in Employee object
+
+- `employee_id`: ID of the employee
+- `last_name`: last name of the employee
+- `first_name`: first name of the employee
+- `email`: email of the employee
+- `phone_number`: phone number of the employee
+- `hire_date`: hire date of the employee
+- `job_id`: ID of the job
+- `manager_id`: ID of the manager
+- `department_id`: ID of the department
+- `store_id`: ID of the store
+- `department`:
+  - `department_id`: ID of the department
+  - `department_name`: name of the department
+- `store`:
+  - `store_id`: ID of the store
+  - `address`: address of the store
+  - `city_id`: city of the store
+  - `province_id`: province of the store
+  - `country_id`: country of the store
+  - `post_code`: post code of the store
+- `job`:
+  - `job_id`: ID of the job
+  - `job_title`: title of the job
+- `manager`: `null` if has no manager
+  - `employee_id`: ID of the manager
+  - `last_name`: last name of the manager
+  - `first_name`: first name of the manager
+  - `email`: email of the manager
+  - `phone_number`: phone number of the manager
+  - `hire_date`: hire date of the manager
+  - `job_id`: ID of the job
+  - `manager_id`: ID of the manager
+  - `department_id`: ID of the department
+  - `store_id`: ID of the store
+
+Sample Obeject:
 
 ```json
 {

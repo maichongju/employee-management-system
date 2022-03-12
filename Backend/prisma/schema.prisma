@@ -24,10 +24,10 @@ model employee {
   manager_id    Int?        @db.UnsignedInt
   department_id Int         @default(0) @db.UnsignedInt
   store_id      Int         @db.UnsignedInt
-  departments   departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_departments")
-  jobs          jobs        @relation(fields: [job_id], references: [job_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_jobs")
-  manager       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_employee")
-  store         store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_employee_store")
+  department    departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_employee_departments")
+  job           jobs        @relation(fields: [job_id], references: [job_id], onDelete: NoAction, map: "FK_employee_jobs")
+  manager       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
+  store         store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
   other_manager employee[]  @relation("employeeToemployee_manager_id")
 
   @@index([department_id], map: "FK_employee_departments")
@@ -46,7 +46,9 @@ model city {
   city_id     String   @id @default("") @db.Char(50)
   name        String   @db.Char(50)
   province_id String   @db.Char(5)
-  province    province @relation(fields: [province_id], references: [province_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_city_province")
+  lat         Float?   @db.Float
+  lon         Float?   @db.Float
+  province    province @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_city_province")
   store       store[]
 
   @@index([province_id], map: "FK_city_province")
@@ -63,7 +65,7 @@ model province {
   province_id String  @default("") @db.Char(5)
   country_id  String  @db.Char(5)
   name        String  @db.Char(20)
-  country     country @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_province_country")
+  country     country @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_province_country")
   city        city[]
   store       store[]
 
@@ -78,9 +80,9 @@ model store {
   province_id String     @db.Char(5)
   country_id  String     @db.Char(5)
   post_code   String     @db.Char(10)
-  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
-  country     country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_country")
-  province    province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_province")
+  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, map: "FK_store_city")
+  country     country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
+  province    province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
   employee    employee[]
 
   @@index([city_id], map: "FK_store_city")
