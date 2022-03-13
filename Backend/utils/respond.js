@@ -31,7 +31,7 @@ function createRespond(content, code = Code.HTTP_OK) {
  * @param {*} message error message
  * @param {*} exception instance 
  */
-function createErrorRespond(code, message, e = null) {
+function createErrorRespond(code, message, e = null, http_code = Code.HTTP_BAD_REQUEST) {
   /* e is not null, special process */
   if (e !== null){
     if (e instanceof Prisma.PrismaClientValidationError){
@@ -40,7 +40,7 @@ function createErrorRespond(code, message, e = null) {
     }
   }
   return {
-    status: Code.HTTP_BAD_REQUEST,
+    status: http_code,
     timestamp: getTimeStamp(),
     error: {
       code: code,
@@ -49,7 +49,16 @@ function createErrorRespond(code, message, e = null) {
   };
 }
 
+function createErrorNotAllowRequestMethod(req, res, next){
+  res.status(Code.HTTP_METHOD_NOT_ALLOWED);
+  res.json(
+    createErrorRespond(Code.ERROR_HTTP_METHOD_NOT_ALLOWED, "http method not allowed",null, Code.HTTP_METHOD_NOT_ALLOWED)
+  );
+
+}
+
 module.exports = {
   createRespond: createRespond,
   createErrorRespond: createErrorRespond,
+  createErrorNotAllowRequestMethod: createErrorNotAllowRequestMethod,
 };

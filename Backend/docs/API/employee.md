@@ -75,7 +75,7 @@ Field Description:
 
 Code: `400 Bad Request`
 
-Error Code: `V1000`
+Error Code: `V1001`
 
 Request: `GET` | `/employee?employe_id=10`
 
@@ -84,13 +84,13 @@ Request: `GET` | `/employee?employe_id=10`
   "status": 400,
   "timestamp": "2022-03-09T04:42:27.367Z",
   "error": {
-    "code": "V1000",
+    "code": "V1001",
     "message": "Invalid argument: `employe_id`"
   }
 }
 ```
 
-Error Code: `V1001`
+Error Code: `V1002`
 
 Request:`GET` | `/employee?employee_id=1`
 
@@ -99,7 +99,7 @@ Request:`GET` | `/employee?employee_id=1`
   "status": 400,
   "timestamp": "2022-03-09T04:44:03.337Z",
   "error": {
-    "code": "V1001",
+    "code": "V1002",
     "message": "employee_id parameter is not supported"
   }
 }
@@ -265,14 +265,14 @@ Field Description:
 
 Code: `400 Bad Request`
 
-Error Code : `V1000`
+Error Code : `V1001`
 
 ```json
 {
   "status": 400,
   "timestamp": "2022-03-09T01:00:47.535Z",
   "error": {
-    "code": "V1000",
+    "code": "V1001",
     "message": "Invalid ID, ID must be a number"
   }
 }

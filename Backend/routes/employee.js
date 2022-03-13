@@ -30,6 +30,11 @@ router.get("/:id", async (req, res, next) => {
   res.json(respond.createRespond(employee));
 });
 
+/* Denied other request type */
+router.all("/:id", (req, res, next) => {
+  respond.createErrorNotAllowRequestMethod(req, res, next);
+});
+
 /* GET Employee page. */
 router.get("/", async (req, res, next) => {
   try {
@@ -84,6 +89,10 @@ router.get("/", async (req, res, next) => {
       res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, null, e));
     }
   }
+});
+
+router.all("/", (req, res, next) => {
+  respond.createErrorNotAllowRequestMethod(req, res, next);
 });
 
 module.exports = router;
