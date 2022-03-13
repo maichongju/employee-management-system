@@ -4,10 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var Code = require('./utils/code');
+var respond = require('./utils/respond');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var employeeRouter = require('./routes/employee');
-
+var weatherRouter = require('./routes/weather');
 var app = express();
 
 // view engine setup
@@ -20,21 +22,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-// app.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
-app.use('/',indexRouter);
-app.use('/employee',employeeRouter);
+app.use('/', indexRouter);
+app.use('/employee', employeeRouter);
+app.use('/weather', weatherRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+  res.status(Code.HTTP_NOT_FOUND);
+  res.json(respond.createErrorRespond(Code.ERROR_API_NOT_FOUND, "API not found", null, Code.HTTP_NOT_FOUND));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
