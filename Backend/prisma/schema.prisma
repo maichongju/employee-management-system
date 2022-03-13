@@ -43,20 +43,25 @@ model jobs {
 }
 
 model city {
-  city_id     String   @id @default("") @db.Char(50)
+  city_id     Int      @id @default(autoincrement()) @db.UnsignedInt
   name        String   @db.Char(50)
   province_id String   @db.Char(5)
-  lat         Float?   @db.Float
-  lon         Float?   @db.Float
+  country_id  String   @db.Char(5)
+  lat         Float    @db.Float
+  lon         Float    @db.Float
+  country     country  @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_city_country")
   province    province @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_city_province")
   store       store[]
+  weather     weather?
 
+  @@index([country_id], map: "FK_city_country")
   @@index([province_id], map: "FK_city_province")
 }
 
 model country {
   country_id String     @id @db.Char(5)
   name       String     @db.Char(20)
+  city       city[]
   province   province[]
   store      store[]
 }
@@ -76,11 +81,11 @@ model province {
 model store {
   store_id    Int        @id @default(autoincrement()) @db.UnsignedInt
   address     String     @db.TinyText
-  city_id     String     @db.Char(50)
+  city_id     Int        @db.UnsignedInt
   province_id String     @db.Char(5)
   country_id  String     @db.Char(5)
   post_code   String     @db.Char(10)
-  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, map: "FK_store_city")
+  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
   country     country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
   province    province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
   employee    employee[]
@@ -88,4 +93,20 @@ model store {
   @@index([city_id], map: "FK_store_city")
   @@index([country_id], map: "FK_store_country")
   @@index([province_id], map: "FK_store_province")
+}
+
+model weather {
+  city_id             Int      @id @db.UnsignedInt
+  date                DateTime @db.Date
+  temp_avg            Float    @db.Float
+  temp_max            Float    @db.Float
+  temp_min            Float    @db.Float
+  rain_prob           Float    @db.Float
+  rain_mm             Float    @db.Float
+  snow_mm             Float    @db.Float
+  wind_speed          Float    @db.Float
+  weather_code        Int
+  warning_description String?  @db.Char(50)
+  last_update         DateTime @db.DateTime(0)
+  city                city     @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_weather_city")
 }

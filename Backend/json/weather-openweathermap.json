@@ -1,0 +1,360 @@
+{
+  "lat": 42.9849,
+  "lon": -81.2453,
+  "timezone": "America/Nipigon",
+  "timezone_offset": -18000,
+  "current": {
+    "dt": 1647118346,
+    "sunrise": 1647085343,
+    "sunset": 1647127633,
+    "temp": -7.12,
+    "feels_like": -14.12,
+    "pressure": 1000,
+    "humidity": 69,
+    "dew_point": -11.32,
+    "uvi": 0.53,
+    "clouds": 40,
+    "visibility": 10000,
+    "wind_speed": 9.26,
+    "wind_deg": 290,
+    "wind_gust": 13.89,
+    "weather": [
+      {
+        "id": 802,
+        "main": "Clouds",
+        "description": "scattered clouds",
+        "icon": "03d"
+      }
+    ]
+  },
+  "daily": [
+    {
+      "dt": 1647104400,
+      "sunrise": 1647085343,
+      "sunset": 1647127633,
+      "moonrise": 1647106200,
+      "moonset": 1647075120,
+      "moon_phase": 0.32,
+      "temp": {
+        "day": -6.78,
+        "min": -8.48,
+        "max": -3.14,
+        "night": -8.48,
+        "eve": -7.23,
+        "morn": -7.37
+      },
+      "feels_like": {
+        "day": -13.78,
+        "night": -15.48,
+        "eve": -14.23,
+        "morn": -14.37
+      },
+      "pressure": 1010,
+      "humidity": 57,
+      "dew_point": -13.11,
+      "wind_speed": 10.3,
+      "wind_deg": 300,
+      "wind_gust": 15.62,
+      "weather": [
+        {
+          "id": 600,
+          "main": "Snow",
+          "description": "light snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 88,
+      "pop": 0.47,
+      "snow": 1.43,
+      "uvi": 1.81
+    },
+    {
+      "dt": 1647190800,
+      "sunrise": 1647171638,
+      "sunset": 1647214104,
+      "moonrise": 1647196140,
+      "moonset": 1647167820,
+      "moon_phase": 0.35,
+      "temp": {
+        "day": -4.32,
+        "min": -10.26,
+        "max": 0.87,
+        "night": 0.87,
+        "eve": -0.14,
+        "morn": -9.61
+      },
+      "feels_like": {
+        "day": -11.32,
+        "night": -4.11,
+        "eve": -5.49,
+        "morn": -16.61
+      },
+      "pressure": 1014,
+      "humidity": 90,
+      "dew_point": -5.86,
+      "wind_speed": 8.29,
+      "wind_deg": 208,
+      "wind_gust": 14.69,
+      "weather": [
+        {
+          "id": 601,
+          "main": "Snow",
+          "description": "snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "snow": 2.56,
+      "uvi": 2.25
+    },
+    {
+      "dt": 1647277200,
+      "sunrise": 1647257932,
+      "sunset": 1647300575,
+      "moonrise": 1647286440,
+      "moonset": 1647252900,
+      "moon_phase": 0.38,
+      "temp": {
+        "day": 4.26,
+        "min": -3.41,
+        "max": 4.91,
+        "night": 2.78,
+        "eve": 3.59,
+        "morn": -3.2
+      },
+      "feels_like": {
+        "day": 0,
+        "night": -0.83,
+        "eve": 0.01,
+        "morn": -6.77
+      },
+      "pressure": 1023,
+      "humidity": 79,
+      "dew_point": 0.9,
+      "wind_speed": 7.28,
+      "wind_deg": 200,
+      "wind_gust": 15.07,
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "clouds": 88,
+      "pop": 0.04,
+      "uvi": 3.3
+    },
+    {
+      "dt": 1647363600,
+      "sunrise": 1647344226,
+      "sunset": 1647387046,
+      "moonrise": 1647376860,
+      "moonset": 1647341220,
+      "moon_phase": 0.41,
+      "temp": {
+        "day": 0.48,
+        "min": 0.48,
+        "max": 3.04,
+        "night": 0.9,
+        "eve": 0.68,
+        "morn": 1.96
+      },
+      "feels_like": {
+        "day": -3.93,
+        "night": 0.9,
+        "eve": -1.33,
+        "morn": -0.63
+      },
+      "pressure": 1022,
+      "humidity": 97,
+      "dew_point": 0.01,
+      "wind_speed": 4.5,
+      "wind_deg": 83,
+      "wind_gust": 13.16,
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "rain": 4.85,
+      "uvi": 0.39
+    },
+    {
+      "dt": 1647450000,
+      "sunrise": 1647430520,
+      "sunset": 1647473517,
+      "moonrise": 1647467400,
+      "moonset": 1647429240,
+      "moon_phase": 0.44,
+      "temp": {
+        "day": 5.59,
+        "min": 0.17,
+        "max": 8.07,
+        "night": 4.39,
+        "eve": 3.85,
+        "morn": 0.58
+      },
+      "feels_like": {
+        "day": 3.25,
+        "night": 2.98,
+        "eve": 1.57,
+        "morn": -1.96
+      },
+      "pressure": 1019,
+      "humidity": 81,
+      "dew_point": 2.47,
+      "wind_speed": 3.55,
+      "wind_deg": 167,
+      "wind_gust": 4.51,
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "clouds": 99,
+      "pop": 0.13,
+      "uvi": 3.53
+    },
+    {
+      "dt": 1647536400,
+      "sunrise": 1647516814,
+      "sunset": 1647559987,
+      "moonrise": 1647557940,
+      "moonset": 1647517140,
+      "moon_phase": 0.48,
+      "temp": {
+        "day": 15.53,
+        "min": 5.69,
+        "max": 16.45,
+        "night": 11.07,
+        "eve": 12.16,
+        "morn": 6.57
+      },
+      "feels_like": {
+        "day": 14.81,
+        "night": 10.37,
+        "eve": 11.62,
+        "morn": 3.61
+      },
+      "pressure": 1011,
+      "humidity": 64,
+      "dew_point": 8.62,
+      "wind_speed": 7.11,
+      "wind_deg": 215,
+      "wind_gust": 11.47,
+      "weather": [
+        {
+          "id": 804,
+          "main": "Clouds",
+          "description": "overcast clouds",
+          "icon": "04d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 0.11,
+      "uvi": 0.02
+    },
+    {
+      "dt": 1647622800,
+      "sunrise": 1647603107,
+      "sunset": 1647646457,
+      "moonrise": 1647648600,
+      "moonset": 1647604860,
+      "moon_phase": 0.5,
+      "temp": {
+        "day": 10.36,
+        "min": 8.23,
+        "max": 11.43,
+        "night": 8.23,
+        "eve": 11.33,
+        "morn": 9.07
+      },
+      "feels_like": {
+        "day": 9.88,
+        "night": 3.68,
+        "eve": 10.92,
+        "morn": 7.08
+      },
+      "pressure": 1000,
+      "humidity": 93,
+      "dew_point": 9.16,
+      "wind_speed": 10.84,
+      "wind_deg": 208,
+      "wind_gust": 17.22,
+      "weather": [
+        {
+          "id": 501,
+          "main": "Rain",
+          "description": "moderate rain",
+          "icon": "10d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "rain": 11.65,
+      "uvi": 1
+    },
+    {
+      "dt": 1647709200,
+      "sunrise": 1647689400,
+      "sunset": 1647732927,
+      "moonrise": 1647739320,
+      "moonset": 1647692580,
+      "moon_phase": 0.55,
+      "temp": {
+        "day": -0.6,
+        "min": -2.07,
+        "max": 2.65,
+        "night": -2.07,
+        "eve": -1.77,
+        "morn": -1.06
+      },
+      "feels_like": {
+        "day": -7.6,
+        "night": -9.07,
+        "eve": -8.77,
+        "morn": -8.06
+      },
+      "pressure": 1004,
+      "humidity": 91,
+      "dew_point": -1.96,
+      "wind_speed": 11.79,
+      "wind_deg": 263,
+      "wind_gust": 17.49,
+      "weather": [
+        {
+          "id": 616,
+          "main": "Snow",
+          "description": "rain and snow",
+          "icon": "13d"
+        }
+      ],
+      "clouds": 100,
+      "pop": 1,
+      "rain": 0.58,
+      "snow": 8.77,
+      "uvi": 1
+    }
+  ],
+  "alerts": [
+    {
+      "sender_name": "Environment Canada",
+      "event": "blowing snow",
+      "start": 1647115241,
+      "end": 1647172841,
+      "description": "\nPoor visibility in snow and blowing snow is expected or occurring in some locations.\n\nHazard:\nReduced visibility near zero at times, especially over open areas. \nStrong winds gusting to 60 km/h. \n\nTiming:\nConditions are expected to gradually improve this evening. \n\nDiscussion:\nThe lake effect flurries and strong winds will weaken this evening.\n\n###\n\nTravel is expected to be hazardous due to reduced visibility in some locations. Visibility may be significantly and suddenly reduced to near zero.\n\nBlowing snow advisories are issued when winds are expected to create blowing snow giving poor visibility to 800 metres or less for at least 3 hours.\n\nPlease continue to monitor alerts and forecasts issued by Environment Canada. To report severe weather, send an email to ONstorm@ec.gc.ca or tweet reports using #ONStorm.\n",
+      "tags": ["Snow/Ice"]
+    }
+  ]
+}

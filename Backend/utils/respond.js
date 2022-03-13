@@ -1,20 +1,20 @@
 const { Prisma } = require("@prisma/client");
 const Code = require('./code');
 
-function getTimeStamp(){
-    // https://stackoverflow.com/questions/10645994/how-to-format-a-utc-date-as-a-yyyy-mm-dd-hhmmss-string-using-nodejs 
-    return new Date().toISOString();
+function getTimeStamp() {
+  // https://stackoverflow.com/questions/10645994/how-to-format-a-utc-date-as-a-yyyy-mm-dd-hhmmss-string-using-nodejs 
+  return new Date().toISOString();
 }
 
-function extraPrismaClientValidationErrorInfo(e){
+function extraPrismaClientValidationErrorInfo(e) {
   const lines = e.message.split('\n');
-  for (var msg of lines){
+  for (var msg of lines) {
     console.log(msg)
-    if (msg.startsWith('Unknown')){
+    if (msg.startsWith('Unknown')) {
       return msg.split(' ')[2];
     }
   }
-  return ' ' ;
+  return ' ';
 }
 
 function createRespond(content, code = Code.HTTP_OK) {
@@ -33,10 +33,10 @@ function createRespond(content, code = Code.HTTP_OK) {
  */
 function createErrorRespond(code, message, e = null, http_code = Code.HTTP_BAD_REQUEST) {
   /* e is not null, special process */
-  if (e !== null){
-    if (e instanceof Prisma.PrismaClientValidationError){
+  if (e !== null) {
+    if (e instanceof Prisma.PrismaClientValidationError) {
       code = Code.ERROR_INVALID_ARGUMENT,
-      message = 'Invalid argument: ' + extraPrismaClientValidationErrorInfo(e);
+        message = 'Invalid argument: ' + extraPrismaClientValidationErrorInfo(e);
     }
   }
   return {
@@ -49,10 +49,10 @@ function createErrorRespond(code, message, e = null, http_code = Code.HTTP_BAD_R
   };
 }
 
-function createErrorNotAllowRequestMethod(req, res, next){
+function createErrorNotAllowRequestMethod(req, res, next) {
   res.status(Code.HTTP_METHOD_NOT_ALLOWED);
   res.json(
-    createErrorRespond(Code.ERROR_HTTP_METHOD_NOT_ALLOWED, "http method not allowed",null, Code.HTTP_METHOD_NOT_ALLOWED)
+    createErrorRespond(Code.ERROR_HTTP_METHOD_NOT_ALLOW, "http method not allowed", null, Code.HTTP_METHOD_NOT_ALLOWED)
   );
 
 }
