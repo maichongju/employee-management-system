@@ -1,17 +1,41 @@
-# Title 
+## Get Employees list
 
-- **URL**
+Return the employee that match the given criteria.
 
-- **Method**
+**URL**: ``
 
-- **URL Parameters**
+**Method**: `GET`
 
-- **Data Parameters**
+**UTL Parameters**:
 
-- **Success Response**
+**Data Parameters**: None
 
-- **Error Response**
+### Success Response
 
-- **Sample Call**
+Code: `200 OK`
 
-- **Note**
+```json
+
+```
+
+Field Description:
+
+**Error Response**:
+
+Code:
+
+Error Code:
+
+Request:
+
+```json
+
+```
+
+**Sample Call**
+
+UR
+
+```json
+
+```
