@@ -26,3 +26,7 @@ More information about database can be found in [here](docs/database.md).
 ## API
 
 Detail of the API can be found in [API Documentation](docs/API.md)
+
+## TODO
+
+- [ ] Add API key check

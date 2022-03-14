@@ -43,16 +43,16 @@ model jobs {
 }
 
 model city {
-  city_id     Int      @id @default(autoincrement()) @db.UnsignedInt
-  name        String   @db.Char(50)
-  province_id String   @db.Char(5)
-  country_id  String   @db.Char(5)
-  lat         Float    @db.Float
-  lon         Float    @db.Float
-  country     country  @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_city_country")
-  province    province @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_city_province")
+  city_id     Int       @id @default(autoincrement()) @db.UnsignedInt
+  name        String    @db.Char(50)
+  province_id String    @db.Char(5)
+  country_id  String    @db.Char(5)
+  lat         Float     @db.Float
+  lon         Float     @db.Float
+  country     country   @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_city_country")
+  province    province  @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_city_province")
   store       store[]
-  weather     weather?
+  weather     weather[]
 
   @@index([country_id], map: "FK_city_country")
   @@index([province_id], map: "FK_city_province")
@@ -79,16 +79,20 @@ model province {
 }
 
 model store {
-  store_id    Int        @id @default(autoincrement()) @db.UnsignedInt
-  address     String     @db.TinyText
-  city_id     Int        @db.UnsignedInt
-  province_id String     @db.Char(5)
-  country_id  String     @db.Char(5)
-  post_code   String     @db.Char(10)
-  city        city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
-  country     country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
-  province    province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
-  employee    employee[]
+  store_id          Int        @id @default(autoincrement()) @db.UnsignedInt
+  address           String     @db.TinyText
+  city_id           Int        @db.UnsignedInt
+  province_id       String     @db.Char(5)
+  country_id        String     @db.Char(5)
+  post_code         String     @db.Char(10)
+  open_hour         DateTime   @db.Time(0)
+  close_hour        DateTime   @db.Time(0)
+  public_open_hour  DateTime   @db.Time(0)
+  public_close_hour DateTime   @db.Time(0)
+  city              city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
+  country           country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
+  province          province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
+  employee          employee[]
 
   @@index([city_id], map: "FK_store_city")
   @@index([country_id], map: "FK_store_country")
@@ -96,7 +100,7 @@ model store {
 }
 
 model weather {
-  city_id             Int      @id @db.UnsignedInt
+  city_id             Int      @db.UnsignedInt
   date                DateTime @db.Date
   temp_avg            Float    @db.Float
   temp_max            Float    @db.Float
@@ -109,4 +113,34 @@ model weather {
   warning_description String?  @db.Char(50)
   last_update         DateTime @db.DateTime(0)
   city                city     @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_weather_city")
+
+  @@id([city_id, date])
+}
+
+model api {
+  employee     Int      @id @db.UnsignedInt
+  api_key      String   @db.Char(50)
+  created_time DateTime @db.Timestamp(0)
+  enable       Int      @db.TinyInt
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model hoilday {
+  Column_1 Int? @map("Column 1")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model schedule {
+  Column_1 Int? @map("Column 1")
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model time_off_request {
+  Column_1 Int? @map("Column 1")
+
+  @@ignore
 }

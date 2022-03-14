@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start-dev": "nodemon ./bin/www"
+    "start-dev": "nodemon --delay 5 ./bin/www",
+    "database-update": "npx prisma db pull && npx prisma generate",
+    "test": "jest"
   },
   "dependencies": {
     "@prisma/client": "^3.10.0",
@@ -13,10 +15,18 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "prisma-exclude": "^1.0.1"
   },
   "devDependencies": {
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
     "prisma": "^3.10.0",
-    "nodemon": "^2.0.15"
+    "supertest": "^6.2.2"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }
