@@ -16,16 +16,29 @@ const exclude = prismaExclude(prisma);
 // });
 
 router.get("/:store", async (req, res, next) => {
-    const store = Number(req.params.store);
-    const geoLocation = await getGeoLocation(store);
-    if (geoLocation === null) {
-        res.status(Code.HTTP_BAD_REQUEST);
-        res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid store ID"));
-        return;
-    }
+    try {
+        const store = Number(req.params.store);
+        const geoLocation = await getGeoLocation(store);
+        if (geoLocation === null) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid store ID"));
+            return;
+        }
 
-    if (req.query.forceRefresh && req.query.forceRefresh === "true") {
-        const weather = await forceRefreshWeather(geoLocation);
+        if (req.query.forceRefresh && req.query.forceRefresh === "true") {
+            const weather = await forceRefreshWeather(geoLocation);
+            const result = {
+                store_id: store,
+                city_id: geoLocation.city_id,
+                lat: geoLocation.lat,
+                lon: geoLocation.lon,
+                forecast: weather
+            };
+            res.json(respond.createRespond(result));
+            return;
+        }
+
+        const weather = await getWeather(geoLocation.city_id);
         const result = {
             store_id: store,
             city_id: geoLocation.city_id,
@@ -34,24 +47,16 @@ router.get("/:store", async (req, res, next) => {
             forecast: weather
         };
         res.json(respond.createRespond(result));
-        return;
+    } catch (e) {
+        next(e);
     }
 
-    const weather = await getWeather(geoLocation.city_id);
-    const result = {
-        store_id: store,
-        city_id: geoLocation.city_id,
-        lat: geoLocation.lat,
-        lon: geoLocation.lon,
-        forecast: weather
-    };
-    res.json(respond.createRespond(result));
 });
 
 /* Denied other request type */
 router.all("/:store", (req, res, next) => {
     respond.createErrorNotAllowRequestMethod(req, res, next);
-  });
+});
 
 
 /**

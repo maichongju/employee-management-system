@@ -7,7 +7,8 @@ const { PrismaClient, Prisma } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 router.get("/:id", async (req, res, next) => {
-  const id = Number(req.params.id);
+  try{
+    const id = Number(req.params.id);
   console.log(id);
   if (isNaN(id)) {
     res.status(Code.HTTP_BAD_REQUEST);
@@ -28,6 +29,10 @@ router.get("/:id", async (req, res, next) => {
     },
   });
   res.json(respond.createRespond(employee));
+  }catch (e){
+    next (e);
+  }
+  
 });
 
 /* Denied other request type */
@@ -87,6 +92,8 @@ router.get("/", async (req, res, next) => {
     if (e instanceof Prisma.PrismaClientValidationError) {
       res.status(Code.HTTP_BAD_REQUEST);
       res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, null, e));
+    }else {
+      next(e);
     }
   }
 });
