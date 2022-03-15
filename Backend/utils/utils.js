@@ -2,17 +2,24 @@ const { DateTime } = require("luxon");
 
 /**
  * Extra date from string.
- * @param {string} datetime datetime string
- * @param {boolean} isUTC true if datetime is UTC, otherwise local time
+ * @param {string} datetime ISO datetime string or Date object
+ * @param {boolean} isUTC true if datetime is UTC, otherwise will take the time as it is
  * @returns YYYY-MM-DD
  */
 function extraDate(datetime, isUTC = true) {
-    const date = DateTime.fromISO(datetime);
+    var date;
+    if (datetime instanceof Date) {
+        date = DateTime.fromJSDate(datetime);
+    }else {
+        date = DateTime.fromISO(datetime);
+    }
     if (date.isValid) {
+
         if (isUTC) {
             return date.toFormat("yyyy-MM-dd");
         }
-        return datetime.split("T")[0];
+        return date.toUTC().toFormat("yyyy-MM-dd");
+
     }
     return null;
 }
@@ -20,18 +27,26 @@ function extraDate(datetime, isUTC = true) {
 /**
  * Extra time from string. 
  * @param {string} datetime datetime string 
- * @param {boolean} isUTC true if datetime is UTC, otherwise local time
  * @returns HH:MM:SS
  */
 function extraTime(datetime, isUTC = true) {
-    const date = DateTime.fromISO(datetime);
+
+    var date;
+    if (datetime instanceof Date) {
+        date = DateTime.fromJSDate(datetime);
+    }else {
+        date = DateTime.fromISO(datetime);
+    }
     if (date.isValid) {
+
         if (isUTC) {
             return date.toFormat("HH:mm:ss");
         }
-        return datetime.split("T")[1].split(".")[0];
+        return date.toUTC().toFormat("HH:mm:ss");
+
     }
     return null;
+
 }
 
 module.exports = {
