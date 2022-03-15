@@ -29,6 +29,7 @@ model employee {
   manager       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
   store         store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
   other_manager employee[]  @relation("employeeToemployee_manager_id")
+  user          user[]
 
   @@index([department_id], map: "FK_employee_departments")
   @@index([manager_id], map: "FK_employee_employee")
@@ -79,20 +80,17 @@ model province {
 }
 
 model store {
-  store_id          Int        @id @default(autoincrement()) @db.UnsignedInt
-  address           String     @db.TinyText
-  city_id           Int        @db.UnsignedInt
-  province_id       String     @db.Char(5)
-  country_id        String     @db.Char(5)
-  post_code         String     @db.Char(10)
-  open_hour         DateTime   @db.Time(0)
-  close_hour        DateTime   @db.Time(0)
-  public_open_hour  DateTime   @db.Time(0)
-  public_close_hour DateTime   @db.Time(0)
-  city              city       @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
-  country           country    @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
-  province          province   @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
-  employee          employee[]
+  store_id    Int          @id @default(autoincrement()) @db.UnsignedInt
+  address     String       @db.TinyText
+  city_id     Int          @db.UnsignedInt
+  province_id String       @db.Char(5)
+  country_id  String       @db.Char(5)
+  post_code   String       @db.Char(10)
+  city        city         @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
+  country     country      @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
+  province    province     @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
+  employee    employee[]
+  store_hour  store_hour[]
 
   @@index([city_id], map: "FK_store_city")
   @@index([country_id], map: "FK_store_country")
@@ -143,4 +141,38 @@ model time_off_request {
   Column_1 Int? @map("Column 1")
 
   @@ignore
+}
+
+model store_hour {
+  store_id          Int      @db.UnsignedInt
+  day               Int      @default(0) @db.TinyInt
+  open_time         DateTime @default(dbgenerated("'00:00:00'")) @db.Time(0)
+  close_time        DateTime @default(dbgenerated("'00:00:00'")) @db.Time(0)
+  public_open_time  DateTime @default(dbgenerated("'00:00:00'")) @db.Time(0)
+  public_close_time DateTime @default(dbgenerated("'00:00:00'")) @db.Time(0)
+  store             store    @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_hour_store")
+
+  @@id([store_id, day])
+}
+
+model session {
+  session_id  String   @id @default("") @db.Char(50)
+  user_id     Int      @db.UnsignedInt
+  create_time DateTime @db.DateTime(0)
+  expire_time DateTime @db.DateTime(0)
+  user        user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user")
+
+  @@index([user_id], map: "FK__user")
+}
+
+model user {
+  user_id     Int       @id @db.UnsignedInt
+  employee_id Int       @db.UnsignedInt
+  username    String    @default("") @db.Char(50)
+  password    String    @default("") @db.Char(64)
+  salt        String    @default("") @db.Char(5)
+  employee    employee  @relation(fields: [employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_employee")
+  session     session[]
+
+  @@index([employee_id], map: "FK_user_employee")
 }
