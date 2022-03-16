@@ -4,7 +4,7 @@
 
 Return the employee that match the given criteria.
 
-**URL**: `/weather/:store`
+**URL**: `/weather/store/:store`
 
 **Method**: `GET`
 
@@ -69,7 +69,7 @@ Code: `400 Bad Request`
 
 Error Code: `V1001`
 
-Request: `GET` | `/weather/0`
+Request: `GET` | `/weather/store/0`
 
 ```json
 {
@@ -84,7 +84,7 @@ Request: `GET` | `/weather/0`
 
 **Sample Call**
 
-URL `GET` | `/weather/1`
+URL `GET` | `/weather/store/1`
 
 ```json
 {

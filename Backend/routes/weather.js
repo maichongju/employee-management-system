@@ -10,25 +10,44 @@ const app = require("../app");
 const prisma = new PrismaClient();
 const exclude = prismaExclude(prisma);
 
-// router.get("/", async (req, res, next) => {
-//     const weather = await weatherUtil.getWeatherForecast(1, 2);
-//     res.json(respond.createRespond(weather));
-// });
-
-router.get("/:store", async (req, res, next) => {
+router.param("store_id", async (req, res, next, id) => {
     try {
-        const store = Number(req.params.store);
-        const geoLocation = await getGeoLocation(store);
-        if (geoLocation === null) {
+        const store_id = Number(id);
+        if (isNaN(store_id)) {
             res.status(Code.HTTP_BAD_REQUEST);
-            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid store ID"));
+            res.json(
+                respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid store_id, ID must be a number")
+            );
             return;
         }
+        const store = await prisma.store.findUnique({
+            where: {
+                store_id: Number(id),
+            }
+        });
+        if (store === null) {
+            res.status(Code.HTTP_NOT_FOUND);
+            res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
+            return;
+        }
+        req.store_id = store_id;
+        next();
+    } catch (e) {
+        next(e);
+    }
+
+});
+
+
+router.get("/store/:store_id", async (req, res, next) => {
+    try {
+        const geoLocation = await getGeoLocation(req.store_id);
 
         if (req.query.forceRefresh && req.query.forceRefresh === "true") {
+            // Temp solution. Fake getting data from the source
             const weather = await forceRefreshWeather(geoLocation);
             const result = {
-                store_id: store,
+                store_id: store_id,
                 city_id: geoLocation.city_id,
                 lat: geoLocation.lat,
                 lon: geoLocation.lon,
@@ -54,7 +73,7 @@ router.get("/:store", async (req, res, next) => {
 });
 
 /* Denied other request type */
-router.all("/:store", (req, res, next) => {
+router.all("/store/:store", (req, res, next) => {
     respond.createErrorNotAllowRequestMethod(req, res, next);
 });
 

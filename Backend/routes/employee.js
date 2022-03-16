@@ -31,7 +31,10 @@ router.get("/:id", async (req, res, next) => {
         manager: true,
       },
     });
-    res.json(respond.createRespond(employee));
+    if (employee !== null) {
+      res.json(respond.createRespond(employee));
+    }
+    res.status(Code.HTTP_BAD_REQUEST).json(respond.createErrorRespond(Code.ERROR_TARGET_NOT_FOUND, "Employee id not found"));
   } catch (e) {
     next(e);
   }

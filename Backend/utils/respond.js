@@ -30,6 +30,7 @@ function createRespond(content, code = Code.HTTP_OK) {
  * @param {*} code error code
  * @param {*} message error message
  * @param {*} exception instance 
+ * @param {*} http_code default HTTP BAD REQUEST 400
  */
 function createErrorRespond(code, message, e = null, http_code = Code.HTTP_BAD_REQUEST) {
   /* e is not null, special process */

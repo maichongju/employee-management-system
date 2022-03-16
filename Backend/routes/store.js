@@ -24,24 +24,27 @@ router.param("store_id", async (req, res, next, id) => {
                 store_id: Number(id),
             },
             include: {
-                store_hour : {
+                store_hour: {
                     select: exclude("store_hour", ["store_id"])
                 },
                 city: true
             }
 
         });
-
-        if (store !== null) {
-            store.store_hour = store.store_hour.map(item => ({
-                ...item,
-                open_time: utils.extraTime(item.open_time, false),
-                close_time: utils.extraTime(item.close_time, false),
-                public_open_time: utils.extraTime(item.public_open_time, false),
-                public_close_time: utils.extraTime(item.public_close_time, false),
-            }
-            ));
+        if (store === null) {
+            res.status(Code.HTTP_NOT_FOUND);
+            res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
+            return;
         }
+        store.store_hour = store.store_hour.map(item => ({
+            ...item,
+            open_time: utils.extraTime(item.open_time, false),
+            close_time: utils.extraTime(item.close_time, false),
+            public_open_time: utils.extraTime(item.public_open_time, false),
+            public_close_time: utils.extraTime(item.public_close_time, false),
+        }
+        ));
+
         req.store = store;
         next();
     } catch (e) {
