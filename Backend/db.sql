@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               8.0.28 - MySQL Community Server - GPL
 -- Server OS:                    Linux
--- HeidiSQL Version:             11.3.0.6295
+-- HeidiSQL Version:             11.2.0.6213
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -11,6 +11,11 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Dumping database structure for db
+CREATE DATABASE IF NOT EXISTS `db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `db`;
 
 -- Dumping structure for table db.api
 CREATE TABLE IF NOT EXISTS `api` (
@@ -156,8 +161,16 @@ INSERT INTO `province` (`province_id`, `country_id`, `name`) VALUES
 
 -- Dumping structure for table db.schedule
 CREATE TABLE IF NOT EXISTS `schedule` (
-  `Column 1` int NOT NULL,
-  PRIMARY KEY (`Column 1`)
+  `employee_id` int unsigned NOT NULL,
+  `department_id` int unsigned NOT NULL,
+  `date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `total_time` time NOT NULL,
+  PRIMARY KEY (`employee_id`,`department_id`,`date`,`start_time`),
+  KEY `FK_schedule_departments` (`department_id`),
+  CONSTRAINT `FK_schedule_departments` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_schedule_employee` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table db.schedule: ~0 rows (approximately)
@@ -188,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `status_type` (
   PRIMARY KEY (`status_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table db.status_type: ~0 rows (approximately)
+-- Dumping data for table db.status_type: ~2 rows (approximately)
 DELETE FROM `status_type`;
 /*!40000 ALTER TABLE `status_type` DISABLE KEYS */;
 INSERT INTO `status_type` (`status_id`, `status`) VALUES
@@ -221,6 +234,26 @@ INSERT INTO `store` (`store_id`, `address`, `city_id`, `province_id`, `country_i
 	(1, '123 some address', 1, 'ON', 'CA', 'XXXXXX');
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 
+-- Dumping structure for table db.store_departments
+CREATE TABLE IF NOT EXISTS `store_departments` (
+  `store_id` int unsigned NOT NULL,
+  `department_id` int unsigned NOT NULL,
+  `max_employee` int NOT NULL DEFAULT '0',
+  `min_employee` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`store_id`,`department_id`),
+  KEY `FK_store_departments_departments` (`department_id`),
+  CONSTRAINT `FK_store_departments_departments` FOREIGN KEY (`department_id`) REFERENCES `departments` (`department_id`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_store_departments_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Dumping data for table db.store_departments: ~0 rows (approximately)
+DELETE FROM `store_departments`;
+/*!40000 ALTER TABLE `store_departments` DISABLE KEYS */;
+INSERT INTO `store_departments` (`store_id`, `department_id`, `max_employee`, `min_employee`) VALUES
+	(1, 1, 5, 1),
+	(1, 2, 3, 2);
+/*!40000 ALTER TABLE `store_departments` ENABLE KEYS */;
+
 -- Dumping structure for table db.store_hour
 CREATE TABLE IF NOT EXISTS `store_hour` (
   `store_id` int unsigned NOT NULL,
@@ -233,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `store_hour` (
   CONSTRAINT `FK_store_hour_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table db.store_hour: ~0 rows (approximately)
+-- Dumping data for table db.store_hour: ~7 rows (approximately)
 DELETE FROM `store_hour`;
 /*!40000 ALTER TABLE `store_hour` DISABLE KEYS */;
 INSERT INTO `store_hour` (`store_id`, `day`, `open_time`, `close_time`, `public_open_time`, `public_close_time`) VALUES
@@ -251,10 +284,19 @@ CREATE TABLE IF NOT EXISTS `time_off_request` (
   `request_id` int NOT NULL AUTO_INCREMENT,
   `employee_id` int unsigned NOT NULL,
   `status_id` tinyint NOT NULL,
-  `review_employee_id` int unsigned DEFAULT NULL,
+  `review_employee_id` int unsigned NOT NULL,
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `off_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
   PRIMARY KEY (`request_id`),
+  KEY `FK_time_off_request_employee` (`employee_id`),
+  KEY `FK_time_off_request_employee_2` (`review_employee_id`),
   KEY `FK_time_off_request_status_type` (`status_id`),
-  CONSTRAINT `FK_time_off_request_status_type` FOREIGN KEY (`status_id`) REFERENCES `status_type` (`status_id`)
+  CONSTRAINT `FK_time_off_request_employee` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_time_off_request_employee_2` FOREIGN KEY (`review_employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_time_off_request_status_type` FOREIGN KEY (`status_id`) REFERENCES `status_type` (`status_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table db.time_off_request: ~0 rows (approximately)
