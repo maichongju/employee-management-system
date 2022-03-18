@@ -41,6 +41,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
 
   console.log(err.message);
+  console.log(err.stack);
   res.status(Code.HTTP_INTERNAL_SERVER_ERROR);
   res.json(respond.createErrorRespond(Code.ERROR_INTERNAL_ERROR, "Internal server error", err, Code.HTTP_INTERNAL_SERVER_ERROR));
 });

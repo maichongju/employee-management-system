@@ -38,10 +38,6 @@ Code: `200 OK`
       "email": "test@mail.com",
       "phone_number": "123456789",
       "hire_date": "2022-03-07T00:00:00.000Z",
-      "job_id": 1000000,
-      "manager_id": null,
-      "department_id": 1,
-      "store_id": 1,
       "departments": {
         "department_id": 1,
         "department_name": "tech"
@@ -122,11 +118,7 @@ Get all employees:
       "first_name": "conner",
       "email": "test@mail.com",
       "phone_number": "123456789",
-      "hire_date": "2022-03-07T00:00:00.000Z",
-      "job_id": 1000000,
-      "manager_id": null,
-      "department_id": 1,
-      "store_id": 1,
+      "hire_date": "2022-03-07",
       "departments": {
         "department_id": 1,
         "department_name": "tech"
@@ -151,11 +143,7 @@ Get all employees:
       "first_name": "allison",
       "email": "example@example.com",
       "phone_number": "123456779",
-      "hire_date": "2022-03-08T00:00:00.000Z",
-      "job_id": 1000000,
-      "manager_id": 1000000,
-      "department_id": 2,
-      "store_id": 1,
+      "hire_date": "2022-03-08",
       "departments": {
         "department_id": 2,
         "department_name": "shoes"
@@ -178,7 +166,7 @@ Get all employees:
         "first_name": "conner",
         "email": "test@mail.com",
         "phone_number": "123456789",
-        "hire_date": "2022-03-07T00:00:00.000Z",
+        "hire_date": "2022-03-07",
         "job_id": 1000000,
         "manager_id": null,
         "department_id": 1,
@@ -218,11 +206,7 @@ Code: `200 OK`
     "first_name": "allison",
     "email": "example@example.com",
     "phone_number": "123456779",
-    "hire_date": "2022-03-08T00:00:00.000Z",
-    "job_id": 1000000,
-    "manager_id": 1000000,
-    "department_id": 2,
-    "store_id": 1,
+    "hire_date": "2022-03-08",
     "departments": {
       "department_id": 2,
       "department_name": "shoes"
@@ -245,7 +229,7 @@ Code: `200 OK`
       "first_name": "conner",
       "email": "test@mail.com",
       "phone_number": "123456789",
-      "hire_date": "2022-03-07T00:00:00.000Z",
+      "hire_date": "2022-03-07",
       "job_id": 1000000,
       "manager_id": null,
       "department_id": 1,
@@ -294,11 +278,7 @@ Get employee with employee ID 1000000
     "first_name": "conner",
     "email": "test@mail.com",
     "phone_number": "123456789",
-    "hire_date": "2022-03-07T00:00:00.000Z",
-    "job_id": 1000000,
-    "manager_id": null,
-    "department_id": 1,
-    "store_id": 1,
+    "hire_date": "2022-03-07",
     "departments": {
       "department_id": 1,
       "department_name": "tech"
@@ -342,10 +322,6 @@ Field in Employee object
 - `email`: email of the employee
 - `phone_number`: phone number of the employee
 - `hire_date`: hire date of the employee
-- `job_id`: ID of the job
-- `manager_id`: ID of the manager
-- `department_id`: ID of the department
-- `store_id`: ID of the store
 - `department`:
   - `department_id`: ID of the department
   - `department_name`: name of the department
@@ -380,11 +356,7 @@ Sample Obeject:
   "first_name": "allison",
   "email": "example@example.com",
   "phone_number": "123456779",
-  "hire_date": "2022-03-08T00:00:00.000Z",
-  "job_id": 1000000,
-  "manager_id": 1000000,
-  "department_id": 2,
-  "store_id": 1,
+  "hire_date": "2022-03-08",
   "departments": {
     "department_id": 2,
     "department_name": "shoes"
@@ -407,7 +379,7 @@ Sample Obeject:
     "first_name": "conner",
     "email": "test@mail.com",
     "phone_number": "123456789",
-    "hire_date": "2022-03-07T00:00:00.000Z",
+    "hire_date": "2022-03-07",
     "job_id": 1000000,
     "manager_id": null,
     "department_id": 1,

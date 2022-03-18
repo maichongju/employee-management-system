@@ -2,37 +2,43 @@ var respond = require("../utils/respond");
 var express = require("express");
 var Code = require("../utils/code");
 var router = express.Router();
+const utils = require("../utils/utils");
 
 const { PrismaClient, Prisma } = require("@prisma/client");
+const { prismaExclude } = require("prisma-exclude");
 const prisma = new PrismaClient();
+const exclude = prismaExclude(prisma);
 
 router.get("/:id", async (req, res, next) => {
-  try{
+  try {
     const id = Number(req.params.id);
-  console.log(id);
-  if (isNaN(id)) {
-    res.status(Code.HTTP_BAD_REQUEST);
-    res.json(
-      respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid ID, ID must be a number")
-    );
-    return;
+    console.log(id);
+    if (isNaN(id)) {
+      res.status(Code.HTTP_BAD_REQUEST);
+      res.json(
+        respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid ID, ID must be a number")
+      );
+      return;
+    }
+    const employee = await prisma.employee.findUnique({
+      where: {
+        employee_id: id,
+      },
+      include: {
+        department: true,
+        store: true,
+        job: true,
+        manager: true,
+      },
+    });
+    if (employee !== null) {
+      res.json(respond.createRespond(employee));
+    }
+    res.status(Code.HTTP_BAD_REQUEST).json(respond.createErrorRespond(Code.ERROR_TARGET_NOT_FOUND, "Employee id not found"));
+  } catch (e) {
+    next(e);
   }
-  const employee = await prisma.employee.findUnique({
-    where: {
-      employee_id: id,
-    },
-    include: {
-      department: true,
-      store: true,
-      job: true,
-      manager: true,
-    },
-  });
-  res.json(respond.createRespond(employee));
-  }catch (e){
-    next (e);
-  }
-  
+
 });
 
 /* Denied other request type */
@@ -76,23 +82,33 @@ router.get("/", async (req, res, next) => {
         param.manager_id = Number(param.manager_id);
       }
     }
-    const result = await prisma.employee.findMany({
+    var result = await prisma.employee.findMany({
       where: {
         ...param,
       },
-      include: {
+      select:
+      {
+        ...exclude("employee", ["department_id", "store_id", "job_id", "manager_id"]),
         department: true,
         store: true,
         job: true,
         manager: true,
       },
     });
+    var result = result.map((item) => ({
+      ...item,
+      hire_date: utils.extraDate(item.hire_date, false),
+      manager: item.manager ? {
+        ...item.manager,
+        hire_date: utils.extraDate(item.manager.hire_date, false),
+      } : null,
+    }));
     res.json(respond.createRespond(result));
   } catch (e) {
     if (e instanceof Prisma.PrismaClientValidationError) {
       res.status(Code.HTTP_BAD_REQUEST);
       res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, null, e));
-    }else {
+    } else {
       next(e);
     }
   }
