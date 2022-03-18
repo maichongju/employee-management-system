@@ -17,7 +17,7 @@ const WARNING_WEATHER_CODE = [
  * @param {float} lat 
  * @param {float} lon 
  */
-async function weatherBitAPI(lat, lon) {
+const weatherBitAPI = async (lat, lon) => {
 
     var result = [];
     for (const day of weatherData_weatherBit.data) {
@@ -49,12 +49,12 @@ async function weatherBitAPI(lat, lon) {
  * @param {float} lat latitude
  * @param {float} lon longitude
  */
-async function getWeatherForecast(lat, lon) {
+const getWeatherForecast = async (lat, lon) => {
     const result = await weatherBitAPI(lat, lon);
     return result;
 }
 
-async function getWeather(city) {
+const getWeather = async (city) => {
     const weather = await prisma.weather.findMany({
         where: {
             city_id: city

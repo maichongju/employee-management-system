@@ -6,7 +6,7 @@ const { DateTime } = require("luxon");
  * @param {boolean} isUTC true if datetime is UTC, otherwise will take the time as it is
  * @returns YYYY-MM-DD
  */
-function extraDate(datetime, isUTC = true) {
+const extraDate = (datetime, isUTC = true) => {
     var date;
     if (datetime instanceof Date) {
         date = DateTime.fromJSDate(datetime);
@@ -29,7 +29,7 @@ function extraDate(datetime, isUTC = true) {
  * @param {string} datetime datetime string 
  * @returns HH:MM:SS
  */
-function extraTime(datetime, isUTC = true) {
+const extraTime = (datetime, isUTC = true) => {
 
     var date;
     if (datetime instanceof Date) {

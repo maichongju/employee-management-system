@@ -83,7 +83,7 @@ router.all("/store/:store", (req, res, next) => {
  * @param {*} store ID of the store
  * Return Geo object contain the location of the store
  */
-async function getGeoLocation(store) {
+const getGeoLocation = async (store) => {
     const storeResult = await prisma.store.findFirst({
         where: {
             store_id: store
@@ -112,7 +112,7 @@ async function getGeoLocation(store) {
  * This will also return the weather from the source, therefor
  * no need to access to the database again.
  */
-async function forceRefreshWeather(store) {
+const forceRefreshWeather = async(store) => {
     // Delete all the weather data of the store
     const deletedRecords = await prisma.weather.deleteMany({
         where: {
@@ -143,7 +143,7 @@ async function forceRefreshWeather(store) {
     return weather;
 }
 
-async function getWeather(city) {
+const getWeather = async (city) => {
     const weather = await prisma.weather.findMany({
         where: {
             city_id: city
