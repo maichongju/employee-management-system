@@ -6,6 +6,7 @@ var router = express.Router();
 
 const { PrismaClient, Prisma } = require("@prisma/client");
 const { prismaExclude } = require("prisma-exclude");
+const { ExcludeError } = require("prisma-exclude/dist/types");
 const prisma = new PrismaClient();
 const exclude = prismaExclude(prisma);
 
@@ -23,7 +24,8 @@ router.param("store_id", async (req, res, next, id) => {
             where: {
                 store_id: Number(id),
             },
-            include: {
+            select: {
+                ...exclude("store",["city_id"]),
                 store_hour: {
                     select: exclude("store_hour", ["store_id"])
                 },
@@ -33,7 +35,7 @@ router.param("store_id", async (req, res, next, id) => {
         });
         if (store === null) {
             res.status(Code.HTTP_NOT_FOUND);
-            res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
+            res.json(respond.createErrorRespond(Code.ERROR_TARGET_NOT_FOUND, "Store not found"));
             return;
         }
         store.store_hour = store.store_hour.map(item => ({
@@ -87,8 +89,10 @@ router.get("/:store_id/employee", async (req, res, next) => {
     }
 
 });
-
-router.all("/", (req, res, next) => {
+router.all("/:store_id/employee", (req, res, next) => {
+    respond.createErrorNotAllowRequestMethod(req, res, next);
+});
+router.all("/:store_id", (req, res, next) => {
     respond.createErrorNotAllowRequestMethod(req, res, next);
 });
 
