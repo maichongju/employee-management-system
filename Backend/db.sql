@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               8.0.28 - MySQL Community Server - GPL
 -- Server OS:                    Linux
--- HeidiSQL Version:             11.2.0.6213
+-- HeidiSQL Version:             11.3.0.6295
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -14,24 +14,12 @@
 
 
 -- Dumping database structure for db
+DROP DATABASE IF EXISTS `db`;
 CREATE DATABASE IF NOT EXISTS `db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `db`;
 
--- Dumping structure for table db.api
-CREATE TABLE IF NOT EXISTS `api` (
-  `employee` int unsigned NOT NULL,
-  `api_key` char(50) NOT NULL,
-  `created_time` timestamp NOT NULL,
-  `enable` tinyint NOT NULL,
-  PRIMARY KEY (`employee`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Dumping data for table db.api: ~0 rows (approximately)
-DELETE FROM `api`;
-/*!40000 ALTER TABLE `api` DISABLE KEYS */;
-/*!40000 ALTER TABLE `api` ENABLE KEYS */;
-
 -- Dumping structure for table db.city
+DROP TABLE IF EXISTS `city`;
 CREATE TABLE IF NOT EXISTS `city` (
   `city_id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -54,6 +42,7 @@ INSERT INTO `city` (`city_id`, `name`, `province_id`, `country_id`, `lat`, `lon`
 /*!40000 ALTER TABLE `city` ENABLE KEYS */;
 
 -- Dumping structure for table db.country
+DROP TABLE IF EXISTS `country`;
 CREATE TABLE IF NOT EXISTS `country` (
   `country_id` char(5) NOT NULL,
   `name` char(20) NOT NULL,
@@ -70,6 +59,7 @@ INSERT INTO `country` (`country_id`, `name`) VALUES
 /*!40000 ALTER TABLE `country` ENABLE KEYS */;
 
 -- Dumping structure for table db.departments
+DROP TABLE IF EXISTS `departments`;
 CREATE TABLE IF NOT EXISTS `departments` (
   `department_id` int unsigned NOT NULL AUTO_INCREMENT,
   `department_name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
@@ -85,6 +75,7 @@ INSERT INTO `departments` (`department_id`, `department_name`) VALUES
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
 
 -- Dumping structure for table db.employee
+DROP TABLE IF EXISTS `employee`;
 CREATE TABLE IF NOT EXISTS `employee` (
   `employee_id` int unsigned NOT NULL AUTO_INCREMENT,
   `last_name` char(20) NOT NULL DEFAULT '',
@@ -116,6 +107,7 @@ INSERT INTO `employee` (`employee_id`, `last_name`, `first_name`, `email`, `phon
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 
 -- Dumping structure for table db.hoilday
+DROP TABLE IF EXISTS `hoilday`;
 CREATE TABLE IF NOT EXISTS `hoilday` (
   `Column 1` int NOT NULL,
   PRIMARY KEY (`Column 1`)
@@ -127,6 +119,7 @@ DELETE FROM `hoilday`;
 /*!40000 ALTER TABLE `hoilday` ENABLE KEYS */;
 
 -- Dumping structure for table db.jobs
+DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE IF NOT EXISTS `jobs` (
   `job_id` int unsigned NOT NULL AUTO_INCREMENT,
   `job_title` char(100) NOT NULL DEFAULT '',
@@ -141,6 +134,7 @@ INSERT INTO `jobs` (`job_id`, `job_title`) VALUES
 /*!40000 ALTER TABLE `jobs` ENABLE KEYS */;
 
 -- Dumping structure for table db.province
+DROP TABLE IF EXISTS `province`;
 CREATE TABLE IF NOT EXISTS `province` (
   `province_id` char(5) NOT NULL DEFAULT '',
   `country_id` char(5) NOT NULL,
@@ -160,9 +154,11 @@ INSERT INTO `province` (`province_id`, `country_id`, `name`) VALUES
 /*!40000 ALTER TABLE `province` ENABLE KEYS */;
 
 -- Dumping structure for table db.schedule
+DROP TABLE IF EXISTS `schedule`;
 CREATE TABLE IF NOT EXISTS `schedule` (
   `employee_id` int unsigned NOT NULL,
   `department_id` int unsigned NOT NULL,
+  `store_id` int unsigned NOT NULL,
   `date` date NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
@@ -179,6 +175,7 @@ DELETE FROM `schedule`;
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 
 -- Dumping structure for table db.session
+DROP TABLE IF EXISTS `session`;
 CREATE TABLE IF NOT EXISTS `session` (
   `session_id` char(50) NOT NULL DEFAULT '',
   `user_id` int unsigned NOT NULL,
@@ -195,6 +192,7 @@ DELETE FROM `session`;
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 
 -- Dumping structure for table db.status_type
+DROP TABLE IF EXISTS `status_type`;
 CREATE TABLE IF NOT EXISTS `status_type` (
   `status_id` tinyint NOT NULL AUTO_INCREMENT,
   `status` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -211,6 +209,7 @@ INSERT INTO `status_type` (`status_id`, `status`) VALUES
 /*!40000 ALTER TABLE `status_type` ENABLE KEYS */;
 
 -- Dumping structure for table db.store
+DROP TABLE IF EXISTS `store`;
 CREATE TABLE IF NOT EXISTS `store` (
   `store_id` int unsigned NOT NULL AUTO_INCREMENT,
   `address` tinytext NOT NULL,
@@ -235,6 +234,7 @@ INSERT INTO `store` (`store_id`, `address`, `city_id`, `province_id`, `country_i
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 
 -- Dumping structure for table db.store_departments
+DROP TABLE IF EXISTS `store_departments`;
 CREATE TABLE IF NOT EXISTS `store_departments` (
   `store_id` int unsigned NOT NULL,
   `department_id` int unsigned NOT NULL,
@@ -246,7 +246,7 @@ CREATE TABLE IF NOT EXISTS `store_departments` (
   CONSTRAINT `FK_store_departments_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table db.store_departments: ~0 rows (approximately)
+-- Dumping data for table db.store_departments: ~2 rows (approximately)
 DELETE FROM `store_departments`;
 /*!40000 ALTER TABLE `store_departments` DISABLE KEYS */;
 INSERT INTO `store_departments` (`store_id`, `department_id`, `max_employee`, `min_employee`) VALUES
@@ -255,6 +255,7 @@ INSERT INTO `store_departments` (`store_id`, `department_id`, `max_employee`, `m
 /*!40000 ALTER TABLE `store_departments` ENABLE KEYS */;
 
 -- Dumping structure for table db.store_hour
+DROP TABLE IF EXISTS `store_hour`;
 CREATE TABLE IF NOT EXISTS `store_hour` (
   `store_id` int unsigned NOT NULL,
   `day` tinyint NOT NULL DEFAULT '0',
@@ -280,16 +281,17 @@ INSERT INTO `store_hour` (`store_id`, `day`, `open_time`, `close_time`, `public_
 /*!40000 ALTER TABLE `store_hour` ENABLE KEYS */;
 
 -- Dumping structure for table db.time_off_request
+DROP TABLE IF EXISTS `time_off_request`;
 CREATE TABLE IF NOT EXISTS `time_off_request` (
   `request_id` int NOT NULL AUTO_INCREMENT,
   `employee_id` int unsigned NOT NULL,
   `status_id` tinyint NOT NULL,
-  `review_employee_id` int unsigned NOT NULL,
+  `review_employee_id` int unsigned DEFAULT NULL,
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_update` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `off_date` date NOT NULL,
-  `start_time` time NOT NULL,
-  `end_time` time NOT NULL,
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
   PRIMARY KEY (`request_id`),
   KEY `FK_time_off_request_employee` (`employee_id`),
   KEY `FK_time_off_request_employee_2` (`review_employee_id`),
@@ -297,14 +299,19 @@ CREATE TABLE IF NOT EXISTS `time_off_request` (
   CONSTRAINT `FK_time_off_request_employee` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_time_off_request_employee_2` FOREIGN KEY (`review_employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_time_off_request_status_type` FOREIGN KEY (`status_id`) REFERENCES `status_type` (`status_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table db.time_off_request: ~0 rows (approximately)
+-- Dumping data for table db.time_off_request: ~3 rows (approximately)
 DELETE FROM `time_off_request`;
 /*!40000 ALTER TABLE `time_off_request` DISABLE KEYS */;
+INSERT INTO `time_off_request` (`request_id`, `employee_id`, `status_id`, `review_employee_id`, `create_time`, `last_update`, `off_date`, `start_time`, `end_time`) VALUES
+	(1, 1000001, 2, 1000000, '2022-03-18 23:09:58', '2022-03-18 23:10:08', '2022-03-16', '00:00:00', '23:59:59'),
+	(2, 1000001, 3, NULL, '2022-03-19 03:11:31', '2022-03-19 03:11:31', '2022-03-17', NULL, NULL),
+	(3, 1000001, 1, NULL, '2022-03-19 03:11:42', '2022-03-19 03:11:42', '2022-03-18', NULL, NULL);
 /*!40000 ALTER TABLE `time_off_request` ENABLE KEYS */;
 
 -- Dumping structure for table db.user
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int unsigned NOT NULL,
   `employee_id` int unsigned NOT NULL,
@@ -322,6 +329,7 @@ DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 -- Dumping structure for table db.weather
+DROP TABLE IF EXISTS `weather`;
 CREATE TABLE IF NOT EXISTS `weather` (
   `city_id` int unsigned NOT NULL,
   `date` date NOT NULL,
