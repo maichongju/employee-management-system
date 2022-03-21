@@ -8,28 +8,33 @@ datasource db {
 }
 
 model departments {
-  department_id   Int        @id @default(autoincrement()) @db.UnsignedInt
-  department_name String     @default("") @db.Char(50)
-  employee        employee[]
+  department_id     Int                 @id @default(autoincrement()) @db.UnsignedInt
+  department_name   String              @default("") @db.Char(50)
+  employee          employee[]
+  schedule          schedule[]
+  store_departments store_departments[]
 }
 
 model employee {
-  employee_id   Int         @id @default(autoincrement()) @db.UnsignedInt
-  last_name     String      @default("") @db.Char(20)
-  first_name    String      @db.Char(20)
-  email         String?     @db.Char(50)
-  phone_number  String?     @db.Char(50)
-  hire_date     DateTime    @db.Date
-  job_id        Int         @default(0) @db.UnsignedInt
-  manager_id    Int?        @db.UnsignedInt
-  department_id Int         @default(0) @db.UnsignedInt
-  store_id      Int         @db.UnsignedInt
-  department    departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_employee_departments")
-  job           jobs        @relation(fields: [job_id], references: [job_id], onDelete: NoAction, map: "FK_employee_jobs")
-  manager       employee?   @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
-  store         store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
-  other_manager employee[]  @relation("employeeToemployee_manager_id")
-  user          user[]
+  employee_id                                                    Int                @id @default(autoincrement()) @db.UnsignedInt
+  last_name                                                      String             @default("") @db.Char(20)
+  first_name                                                     String             @db.Char(20)
+  email                                                          String?            @db.Char(50)
+  phone_number                                                   String?            @db.Char(50)
+  hire_date                                                      DateTime           @db.Date
+  job_id                                                         Int                @default(0) @db.UnsignedInt
+  manager_id                                                     Int?               @db.UnsignedInt
+  department_id                                                  Int                @default(0) @db.UnsignedInt
+  store_id                                                       Int                @db.UnsignedInt
+  department                                                     departments        @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_employee_departments")
+  job                                                            jobs               @relation(fields: [job_id], references: [job_id], onDelete: NoAction, map: "FK_employee_jobs")
+  manager                                                        employee?          @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
+  store                                                          store              @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
+  other_manager                                                  employee[]         @relation("employeeToemployee_manager_id")
+  schedule                                                       schedule[]
+  time_off_request_employeeTotime_off_request_employee_id        time_off_request[] @relation("employeeTotime_off_request_employee_id")
+  time_off_request_employeeTotime_off_request_review_employee_id time_off_request[] @relation("employeeTotime_off_request_review_employee_id")
+  user                                                           user[]
 
   @@index([department_id], map: "FK_employee_departments")
   @@index([manager_id], map: "FK_employee_employee")
@@ -80,17 +85,18 @@ model province {
 }
 
 model store {
-  store_id    Int          @id @default(autoincrement()) @db.UnsignedInt
-  address     String       @db.TinyText
-  city_id     Int          @db.UnsignedInt
-  province_id String       @db.Char(5)
-  country_id  String       @db.Char(5)
-  post_code   String       @db.Char(10)
-  city        city         @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
-  country     country      @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
-  province    province     @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
-  employee    employee[]
-  store_hour  store_hour[]
+  store_id          Int                 @id @default(autoincrement()) @db.UnsignedInt
+  address           String              @db.TinyText
+  city_id           Int                 @db.UnsignedInt
+  province_id       String              @db.Char(5)
+  country_id        String              @db.Char(5)
+  post_code         String              @db.Char(10)
+  city              city                @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
+  country           country             @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
+  province          province            @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
+  employee          employee[]
+  store_departments store_departments[]
+  store_hour        store_hour[]
 
   @@index([city_id], map: "FK_store_city")
   @@index([country_id], map: "FK_store_country")
@@ -115,32 +121,24 @@ model weather {
   @@id([city_id, date])
 }
 
-model api {
-  employee     Int      @id @db.UnsignedInt
-  api_key      String   @db.Char(50)
-  created_time DateTime @db.Timestamp(0)
-  enable       Int      @db.TinyInt
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model hoilday {
-  Column_1 Int? @map("Column 1")
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model schedule {
-  Column_1 Int? @map("Column 1")
-
-  @@ignore
-}
-
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model time_off_request {
-  Column_1 Int? @map("Column 1")
+  request_id                                             Int         @id @default(autoincrement())
+  employee_id                                            Int         @db.UnsignedInt
+  status_id                                              Int         @db.TinyInt
+  review_employee_id                                     Int?        @db.UnsignedInt
+  create_time                                            DateTime    @default(now()) @db.DateTime(0)
+  last_update                                            DateTime    @default(now()) @db.DateTime(0)
+  off_date                                               DateTime    @db.Date
+  start_time                                             DateTime?   @db.Time(0)
+  end_time                                               DateTime?   @db.Time(0)
+  employee_employeeTotime_off_request_employee_id        employee    @relation("employeeTotime_off_request_employee_id", fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_time_off_request_employee")
+  employee_employeeTotime_off_request_review_employee_id employee?   @relation("employeeTotime_off_request_review_employee_id", fields: [review_employee_id], references: [employee_id], onDelete: NoAction, map: "FK_time_off_request_employee_2")
+  status_type                                            status_type @relation(fields: [status_id], references: [status_id], onDelete: NoAction, map: "FK_time_off_request_status_type")
 
-  @@ignore
+  @@index([employee_id], map: "FK_time_off_request_employee")
+  @@index([review_employee_id], map: "FK_time_off_request_employee_2")
+  @@index([status_id], map: "FK_time_off_request_status_type")
 }
 
 model store_hour {
@@ -175,4 +173,41 @@ model user {
   session     session[]
 
   @@index([employee_id], map: "FK_user_employee")
+}
+
+model status_type {
+  status_id        Int                @id @default(autoincrement()) @db.TinyInt
+  status           String             @db.Char(50)
+  time_off_request time_off_request[]
+}
+
+model hoilday {
+  Column_1 Int @id @map("Column 1")
+}
+
+model schedule {
+  employee_id   Int         @db.UnsignedInt
+  department_id Int         @db.UnsignedInt
+  store_id      Int         @db.UnsignedInt
+  date          DateTime    @db.Date
+  start_time    DateTime    @db.Time(0)
+  end_time      DateTime    @db.Time(0)
+  total_time    DateTime    @db.Time(0)
+  departments   departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_schedule_departments")
+  employee      employee    @relation(fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_schedule_employee")
+
+  @@id([employee_id, department_id, date, start_time])
+  @@index([department_id], map: "FK_schedule_departments")
+}
+
+model store_departments {
+  store_id      Int         @db.UnsignedInt
+  department_id Int         @db.UnsignedInt
+  max_employee  Int         @default(0)
+  min_employee  Int         @default(0)
+  departments   departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_store_departments_departments")
+  store         store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_store_departments_store")
+
+  @@id([store_id, department_id])
+  @@index([department_id], map: "FK_store_departments_departments")
 }
