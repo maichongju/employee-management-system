@@ -182,17 +182,17 @@
 
 
             <!-- Chart Start -->
-            <div class="container-fluid pt-4 px-4">
+            <div class="container-fluid pt-4 px-4"style="height: 80%">
                 
                     
                      
                     
-                        <div class="h-100 bg-light rounded p-4">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="h-100 bg-light rounded p-4" style="height: 80%">
+                            <div class="d-flex align-items-center justify-content-between mb-4" >
                                 <h6 class="mb-0">Calender</h6>
                                 <a href="">Show All</a>
                             </div>
-                            <div id="calender"></div>
+                            <div id="calender"style="height: 80%"></div>
                             
                         </div>
                     
