@@ -63,15 +63,17 @@ DROP TABLE IF EXISTS `departments`;
 CREATE TABLE IF NOT EXISTS `departments` (
   `department_id` int unsigned NOT NULL AUTO_INCREMENT,
   `department_name` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `skill` json NOT NULL,
   PRIMARY KEY (`department_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dumping data for table db.departments: ~2 rows (approximately)
 DELETE FROM `departments`;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
-INSERT INTO `departments` (`department_id`, `department_name`) VALUES
-	(1, 'tech'),
-	(2, 'shoes');
+INSERT INTO `departments` (`department_id`, `department_name`, `skill`) VALUES
+	(1, 'tech', '{}'),
+	(2, 'shoes', '{}'),
+	(3, 'cashier', '{}');
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
 
 -- Dumping structure for table db.employee
@@ -83,10 +85,11 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `email` char(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `phone_number` char(50) DEFAULT NULL,
   `hire_date` date NOT NULL,
-  `job_id` int unsigned NOT NULL DEFAULT '0',
+  `job_id` int unsigned NOT NULL,
   `manager_id` int unsigned DEFAULT NULL,
   `department_id` int unsigned NOT NULL DEFAULT '0',
   `store_id` int unsigned NOT NULL,
+  `fulltime` tinyint(1) NOT NULL,
   PRIMARY KEY (`employee_id`),
   KEY `FK_employee_departments` (`department_id`),
   KEY `FK_employee_employee` (`manager_id`),
@@ -96,15 +99,46 @@ CREATE TABLE IF NOT EXISTS `employee` (
   CONSTRAINT `FK_employee_employee` FOREIGN KEY (`manager_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_employee_jobs` FOREIGN KEY (`job_id`) REFERENCES `jobs` (`job_id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_employee_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1000002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1000010 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table db.employee: ~2 rows (approximately)
+-- Dumping data for table db.employee: ~10 rows (approximately)
 DELETE FROM `employee`;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` (`employee_id`, `last_name`, `first_name`, `email`, `phone_number`, `hire_date`, `job_id`, `manager_id`, `department_id`, `store_id`) VALUES
-	(1000000, 'rocky', 'conner', 'test@mail.com', '123456789', '2022-03-07', 1000000, NULL, 1, 1),
-	(1000001, 'karla', 'allison', 'example@example.com', '123456779', '2022-03-08', 1000000, 1000000, 2, 1);
+INSERT INTO `employee` (`employee_id`, `last_name`, `first_name`, `email`, `phone_number`, `hire_date`, `job_id`, `manager_id`, `department_id`, `store_id`, `fulltime`) VALUES
+	(1000000, 'rocky', 'conner', 'test@mail.com', '123456789', '2022-03-07', 1000000, NULL, 1, 1, 1),
+	(1000001, 'karla', 'allison', 'example@example.com', '123456779', '2022-03-08', 1000000, 1000000, 2, 1, 1),
+	(1000002, '1', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000003, '2', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000004, '3', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000005, '4', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000006, '5', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000007, '6', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000008, '7', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1),
+	(1000009, '8', 'Robin', NULL, NULL, '2022-03-07', 1000000, 1000000, 2, 1, 1);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
+
+-- Dumping structure for table db.employee_performance_manager
+DROP TABLE IF EXISTS `employee_performance_manager`;
+CREATE TABLE IF NOT EXISTS `employee_performance_manager` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `employee_id` int unsigned NOT NULL,
+  `evaluator_id` int unsigned NOT NULL,
+  `evaluation` json NOT NULL,
+  `comment` text,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_employee_performance_manager_employee` (`employee_id`),
+  KEY `FK_employee_performance_manager_employee_2` (`evaluator_id`),
+  CONSTRAINT `FK_employee_performance_manager_employee` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE,
+  CONSTRAINT `FK_employee_performance_manager_employee_2` FOREIGN KEY (`evaluator_id`) REFERENCES `employee` (`employee_id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Store raw input from manager evaluation for employees';
+
+-- Dumping data for table db.employee_performance_manager: ~0 rows (approximately)
+DELETE FROM `employee_performance_manager`;
+/*!40000 ALTER TABLE `employee_performance_manager` DISABLE KEYS */;
+INSERT INTO `employee_performance_manager` (`id`, `employee_id`, `evaluator_id`, `evaluation`, `comment`, `update_time`) VALUES
+	(1, 1000001, 1000000, '{"sale": 10, "communication": 60}', NULL, '2022-03-24 05:16:07');
+/*!40000 ALTER TABLE `employee_performance_manager` ENABLE KEYS */;
 
 -- Dumping structure for table db.hoilday
 DROP TABLE IF EXISTS `hoilday`;
@@ -152,6 +186,38 @@ INSERT INTO `province` (`province_id`, `country_id`, `name`) VALUES
 	('NY', 'US', 'New York'),
 	('ON', 'CA', 'Ontario');
 /*!40000 ALTER TABLE `province` ENABLE KEYS */;
+
+-- Dumping structure for table db.sales_record
+DROP TABLE IF EXISTS `sales_record`;
+CREATE TABLE IF NOT EXISTS `sales_record` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `sales_employee_id` int unsigned NOT NULL,
+  `total` decimal(20,2) unsigned NOT NULL,
+  `store_id` int unsigned NOT NULL,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `FK_sales_record_employee` (`sales_employee_id`),
+  KEY `FK_sales_record_store` (`store_id`),
+  CONSTRAINT `FK_sales_record_employee` FOREIGN KEY (`sales_employee_id`) REFERENCES `employee` (`employee_id`),
+  CONSTRAINT `FK_sales_record_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Dumping data for table db.sales_record: ~0 rows (approximately)
+DELETE FROM `sales_record`;
+/*!40000 ALTER TABLE `sales_record` DISABLE KEYS */;
+INSERT INTO `sales_record` (`id`, `sales_employee_id`, `total`, `store_id`, `time`) VALUES
+	(1, 1000001, 100.10, 1, '2022-03-25 00:20:19'),
+	(2, 1000001, 200.00, 1, '2022-03-25 00:20:19'),
+	(3, 1000001, 50.00, 1, '2022-03-25 00:20:19'),
+	(4, 1000001, 10.00, 1, '2022-03-25 00:20:19'),
+	(5, 1000001, 40.00, 1, '2022-03-25 00:20:19'),
+	(6, 1000001, 50.00, 1, '2022-03-25 00:20:19'),
+	(7, 1000002, 100.10, 1, '2022-03-25 00:20:19'),
+	(8, 1000005, 70.00, 1, '2022-03-25 00:20:19'),
+	(9, 1000001, 100.10, 1, '2022-03-25 00:20:19'),
+	(10, 1000001, 100.10, 1, '2022-03-25 00:20:19'),
+	(11, 1000001, 100.10, 1, '2022-03-25 00:20:19');
+/*!40000 ALTER TABLE `sales_record` ENABLE KEYS */;
 
 -- Dumping structure for table db.schedule
 DROP TABLE IF EXISTS `schedule`;

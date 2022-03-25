@@ -10,31 +10,36 @@ datasource db {
 model departments {
   department_id     Int                 @id @default(autoincrement()) @db.UnsignedInt
   department_name   String              @default("") @db.Char(50)
+  skill             Json
   employee          employee[]
   schedule          schedule[]
   store_departments store_departments[]
 }
 
 model employee {
-  employee_id                                                    Int                @id @default(autoincrement()) @db.UnsignedInt
-  last_name                                                      String             @default("") @db.Char(20)
-  first_name                                                     String             @db.Char(20)
-  email                                                          String?            @db.Char(50)
-  phone_number                                                   String?            @db.Char(50)
-  hire_date                                                      DateTime           @db.Date
-  job_id                                                         Int                @default(0) @db.UnsignedInt
-  manager_id                                                     Int?               @db.UnsignedInt
-  department_id                                                  Int                @default(0) @db.UnsignedInt
-  store_id                                                       Int                @db.UnsignedInt
-  department                                                     departments        @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_employee_departments")
-  job                                                            jobs               @relation(fields: [job_id], references: [job_id], onDelete: NoAction, map: "FK_employee_jobs")
-  manager                                                        employee?          @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
-  store                                                          store              @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
-  other_manager                                                  employee[]         @relation("employeeToemployee_manager_id")
-  schedule                                                       schedule[]
-  time_off_request_employeeTotime_off_request_employee_id        time_off_request[] @relation("employeeTotime_off_request_employee_id")
-  time_off_request_employeeTotime_off_request_review_employee_id time_off_request[] @relation("employeeTotime_off_request_review_employee_id")
-  user                                                           user[]
+  employee_id                                                                      Int                            @id @default(autoincrement()) @db.UnsignedInt
+  last_name                                                                        String                         @default("") @db.Char(20)
+  first_name                                                                       String                         @db.Char(20)
+  email                                                                            String?                        @db.Char(50)
+  phone_number                                                                     String?                        @db.Char(50)
+  hire_date                                                                        DateTime                       @db.Date
+  job_id                                                                           Int                            @db.UnsignedInt
+  manager_id                                                                       Int?                           @db.UnsignedInt
+  department_id                                                                    Int                            @default(0) @db.UnsignedInt
+  store_id                                                                         Int                            @db.UnsignedInt
+  fulltime                                                                         Boolean
+  department                                                                       departments                    @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_employee_departments")
+  job                                                                              jobs                           @relation(fields: [job_id], references: [job_id], onDelete: NoAction, map: "FK_employee_jobs")
+  manager                                                                          employee?                      @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
+  store                                                                            store                          @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
+  other_manager                                                                    employee[]                     @relation("employeeToemployee_manager_id")
+  employee_performance_manager_employeeToemployee_performance_manager_employee_id  employee_performance_manager[] @relation("employeeToemployee_performance_manager_employee_id")
+  employee_performance_manager_employeeToemployee_performance_manager_evaluator_id employee_performance_manager[] @relation("employeeToemployee_performance_manager_evaluator_id")
+  sales_record                                                                     sales_record[]
+  schedule                                                                         schedule[]
+  time_off_request_employeeTotime_off_request_employee_id                          time_off_request[]             @relation("employeeTotime_off_request_employee_id")
+  time_off_request_employeeTotime_off_request_review_employee_id                   time_off_request[]             @relation("employeeTotime_off_request_review_employee_id")
+  user                                                                             user[]
 
   @@index([department_id], map: "FK_employee_departments")
   @@index([manager_id], map: "FK_employee_employee")
@@ -95,6 +100,7 @@ model store {
   country           country             @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
   province          province            @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
   employee          employee[]
+  sales_record      sales_record[]
   store_departments store_departments[]
   store_hour        store_hour[]
 
@@ -210,4 +216,31 @@ model store_departments {
 
   @@id([store_id, department_id])
   @@index([department_id], map: "FK_store_departments_departments")
+}
+
+model employee_performance_manager {
+  id                                                           Int      @id @default(autoincrement())
+  employee_id                                                  Int      @db.UnsignedInt
+  evaluator_id                                                 Int      @db.UnsignedInt
+  evaluation                                                   Json
+  comment                                                      String?  @db.Text
+  update_time                                                  DateTime @default(now()) @db.Timestamp(0)
+  employee_employeeToemployee_performance_manager_employee_id  employee @relation("employeeToemployee_performance_manager_employee_id", fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee")
+  employee_employeeToemployee_performance_manager_evaluator_id employee @relation("employeeToemployee_performance_manager_evaluator_id", fields: [evaluator_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee_2")
+
+  @@index([employee_id], map: "FK_employee_performance_manager_employee")
+  @@index([evaluator_id], map: "FK_employee_performance_manager_employee_2")
+}
+
+model sales_record {
+  id                Int      @id
+  sales_employee_id Int      @db.UnsignedInt
+  total             Decimal  @db.Decimal(20, 2)
+  store_id          Int      @db.UnsignedInt
+  time              DateTime @db.DateTime(0)
+  employee          employee @relation(fields: [sales_employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_employee")
+  store             store    @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_store")
+
+  @@index([sales_employee_id], map: "FK_sales_record_employee")
+  @@index([store_id], map: "FK_sales_record_store")
 }
