@@ -3,6 +3,7 @@ var express = require("express");
 var Code = require("../utils/code");
 var router = express.Router();
 var weatherUtil = require("../utils/weather");
+const {extraDate} = require("../utils/utils");
 
 const { PrismaClient, Prisma } = require("@prisma/client");
 const { prismaExclude } = require("prisma-exclude");
@@ -38,10 +39,15 @@ router.param("store_id", async (req, res, next, id) => {
 
 });
 
+router.param("employee_id", async (req, res, next, id) => {
+
+    next();
+})
 
 router.get("/store/:store_id", async (req, res, next) => {
     try {
-        const geoLocation = await getGeoLocation(req.store_id);
+        const store_id = req.store_id;
+        const geoLocation = await getGeoLocation(store_id);
 
         if (req.query.forceRefresh && req.query.forceRefresh === "true") {
             // Temp solution. Fake getting data from the source
@@ -59,11 +65,14 @@ router.get("/store/:store_id", async (req, res, next) => {
 
         const weather = await getWeather(geoLocation.city_id);
         const result = {
-            store_id: store,
+            store_id: store_id,
             city_id: geoLocation.city_id,
             lat: geoLocation.lat,
             lon: geoLocation.lon,
-            forecast: weather
+            forecast: weather.map(w => ({
+                ...w,
+                date: extraDate(w.date, false) 
+            }))
         };
         res.json(respond.createRespond(result));
     } catch (e) {
@@ -112,7 +121,7 @@ const getGeoLocation = async (store) => {
  * This will also return the weather from the source, therefor
  * no need to access to the database again.
  */
-const forceRefreshWeather = async(store) => {
+const forceRefreshWeather = async (store) => {
     // Delete all the weather data of the store
     const deletedRecords = await prisma.weather.deleteMany({
         where: {
