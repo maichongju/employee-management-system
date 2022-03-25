@@ -3,7 +3,7 @@ var express = require("express");
 var Code = require("../utils/code");
 var router = express.Router();
 var weatherUtil = require("../utils/weather");
-const {extraDate} = require("../utils/utils");
+const { extraDate } = require("../utils/utils");
 
 const { PrismaClient, Prisma } = require("@prisma/client");
 const { prismaExclude } = require("prisma-exclude");
@@ -27,7 +27,7 @@ router.param("store_id", async (req, res, next, id) => {
             }
         });
         if (store === null) {
-            res.status(Code.HTTP_NOT_FOUND);
+            res.status(Code.HTTP_BAD_REQUEST);
             res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
             return;
         }
@@ -71,7 +71,7 @@ router.get("/store/:store_id", async (req, res, next) => {
             lon: geoLocation.lon,
             forecast: weather.map(w => ({
                 ...w,
-                date: extraDate(w.date, false) 
+                date: extraDate(w.date, false)
             }))
         };
         res.json(respond.createRespond(result));

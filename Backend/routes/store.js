@@ -34,7 +34,7 @@ router.param("store_id", async (req, res, next, id) => {
 
         });
         if (store === null) {
-            res.status(Code.HTTP_NOT_FOUND);
+            res.status(Code.HTTP_BAD_REQUEST);
             res.json(respond.createErrorRespond(Code.ERROR_TARGET_NOT_FOUND, "Store not found"));
             return;
         }
