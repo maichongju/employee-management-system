@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+
   mysql:
     container_name: mysql
     image: mysql:8
