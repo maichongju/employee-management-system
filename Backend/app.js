@@ -1,10 +1,12 @@
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fs = require('fs');
 const cors = require('cors');
+const supertokens = require('supertokens-node');
+const Session = require("supertokens-node/recipe/session");
+const EmailPassword = require("supertokens-node/recipe/emailpassword");
 
 var Code = require('./utils/code');
 var respond = require('./utils/respond');
@@ -13,8 +15,27 @@ var usersRouter = require('./routes/users');
 var employeeRouter = require('./routes/employee');
 var weatherRouter = require('./routes/weather');
 var storeRouter = require('./routes/store');
+var scheduleRouter = require('./routes/schedule');
+var evalRouter = require('./routes/eval');
+var authRouter = require('./routes/auth');
 var app = express();
 app.use(cors());
+
+// supertokens setup
+supertokens.init({
+  supertokens: {
+    connectionURI: process.env.SUPERTOKENS_URL
+  },
+  appInfo: {
+    apiDomain: "http://localhost:3000",
+    appName: "appName",
+    websiteDomain: "http://localhost:3000"
+  },
+  recipeList: [
+    Session.init(),
+    EmailPassword.init()
+  ]
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,9 +50,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/employee', employeeRouter);
 app.use('/weather', weatherRouter);
 app.use('/store', storeRouter);
+app.use('/schedule', scheduleRouter);
+app.use('/eval', evalRouter);
+app.use('/user', usersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
