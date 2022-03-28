@@ -5,6 +5,7 @@ Here are the list of endpoints available in the REST API.
 - [`/employee`](API/employee.md)
 - [`/weather`](API/weather.md)
 - [`/store`](API/store.md)
+- [`/auth`](API/authentication.md) Authentication
 
 ## Error Codes
 
@@ -13,3 +14,9 @@ Here are the list of endpoints available in the REST API.
 - `V1002` Argument not support
 - `V1003` Unsupported parameter. Parameter existed but do not support for that api endpoint.
 - `V1004` API not found or not implemented.
+- `V1005` Internal Error
+- `V1006` Target not found. Target not found in database.
+- `V1007` User existed. User already existed in database.
+- `V1008` Invalid session token. Session token is invalid
+- `V1009` Invalid credential. The credential is invalid.
+- `V1010` User already exist. Only return in sign up page.
