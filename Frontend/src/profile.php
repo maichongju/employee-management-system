@@ -9,17 +9,9 @@ curl_setopt ( $ch, CURLOPT_HEADER, 0 );
 curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
 $file_contents = curl_exec ( $ch );
-if (curl_errno ( $ch )) {
-    echo curl_error ( $ch );
-    curl_close ( $ch );
-    exit ();
-}
-curl_close ( $ch );
 
 // dump output of api if you want during test
-echo $file_contents;
-phpinfo();
-exit();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
