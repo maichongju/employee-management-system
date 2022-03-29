@@ -1,10 +1,24 @@
+<?php 
+
+$ch = curl_init ();
+var_dump($ch);
+$timeout = 0; // 100; // set to zero for no timeout
+$myHITurl = "http://localhost:3000/employee";
+curl_setopt ( $ch, CURLOPT_URL, $myHITurl );
+curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+$file_contents = curl_exec ( $ch );
+
+// dump output of api if you want during test
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Calendar
-    </title>
+    <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -69,17 +83,17 @@
                             <a href="element.html" class="dropdown-item">Other Elements</a>
                         </div>
                     </div>
-                    <a href="widget.html" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>Widgets</a>
+                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
                     <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="signin.html" class="dropdown-item">Sign In</a>
                             <a href="signup.html" class="dropdown-item">Sign Up</a>
                             <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
+                            <a href="blank.html" class="dropdown-item active">Blank Page</a>
                         </div>
                     </div>
                 </div>
@@ -181,27 +195,34 @@
             <!-- Navbar End -->
 
 
-            <!-- Chart Start -->
-            <div class="container-fluid pt-4 px-4"style="height: 80%">
-                
+            <!-- Blank Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
                     
-                     
-                    
-                        <div class="h-100 bg-light rounded p-4" style="height: 80%">
-                            <div class="d-flex align-items-center justify-content-between mb-4" >
-                                <h6 class="mb-0">Calender</h6>
-                                <a href="">Show All</a>
-                            </div>
-                            <div id="calender"style="height: 80%"></div>
-                            
-                        </div>
-                    
+                    <h6 class="mb-4">Employee Information</h6>
                    
-                   
-                   
-                
+                    <dl class="row mb-0">
+                                <dt class="col-sm-4">NAME</dt>
+                                <dd class="col-sm-8">Jhon Doe</dd>
+
+                                <dt class="col-sm-4">EMAIL</dt>
+                                <dd class="col-sm-8">jhondoe@organization.com</dd>
+
+                                <dt class="col-sm-4">ADDRESS</dt>
+                                <dd class="col-sm-8">712,Platt's Lane</dd>
+
+                                <dt class="col-sm-4 text-truncate">ROLE</dt>
+                                <dd class="col-sm-8">Flooring Associate</dd>
+
+                               
+                                    
+                                    
+                                </dd>
+                            </dl>
+
+                </div>
             </div>
-            <!-- Chart End -->
+            <!-- Blank End -->
 
 
             <!-- Footer Start -->
