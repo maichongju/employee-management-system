@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const Session = require("supertokens-node/recipe/session");
 
 /**
  * Extra date from string.
@@ -10,7 +11,7 @@ const extraDate = (datetime, isUTC = true) => {
     var date;
     if (datetime instanceof Date) {
         date = DateTime.fromJSDate(datetime);
-    }else {
+    } else {
         date = DateTime.fromISO(datetime);
     }
     if (date.isValid) {
@@ -34,7 +35,7 @@ const extraTime = (datetime, isUTC = true) => {
     var date;
     if (datetime instanceof Date) {
         date = DateTime.fromJSDate(datetime);
-    }else {
+    } else {
         date = DateTime.fromISO(datetime);
     }
     if (date.isValid) {
@@ -49,7 +50,69 @@ const extraTime = (datetime, isUTC = true) => {
 
 }
 
+/**
+ * Check if authentication is disable.
+ * @returns true if authentication is required, otherwise false
+ */
+const isSkipAuth = () => {
+    if (process.env.NODE_ENV === "development" &&
+        process.env.DISABLE_SESSION_VERIFICATION === "true") {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * Verify if the given session token valid. 
+ * Can use Environment variable to disable session 
+ * verification in development environment.
+ * @param {*} req 
+ * @param {*} res 
+ * @returns Session Information
+ */
+const verifySession = async (req, res) => {
+
+    let sessionInfo = {};
+    let session = await Session.getSession(req, res, { sessionRequired: true })
+        .catch(err => {
+            sessionInfo.isValid = false;
+        });
+    if (session) {
+        sessionInfo.isValid = true;
+        sessionInfo.userID = session.userID;
+        sessionInfo.sessionHandle = session.sessionHandle;
+        sessionInfo.sessionData = session.sessionData;
+    }
+    return sessionInfo;
+}
+
+/**
+ * Get the session information from the request. If the 
+ * session is not valid, it will return null and respond
+ * with ERROR_INVALID_SESSION.
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+const getSessionInfo = async (req, res) => {
+    var sessionInfo = null;
+    if (!utils.isSkipAuth()) {
+        sessionInfo = await utils.verifySession(req, res);
+        if (!sessionInfo.isValid) {
+            respond.createErrorInvalidSession(req, res, next);
+            return sessionInfo;
+        }
+    } else {
+        sessionInfo = {};
+    }
+    return sessionInfo;
+}
+
 module.exports = {
     extraDate,
     extraTime,
+    verifySession,
+    isSkipAuth,
+    getSessionInfo
 }

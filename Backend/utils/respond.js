@@ -50,6 +50,11 @@ const createErrorRespond = (code, message, e = null, http_code = Code.HTTP_BAD_R
   };
 }
 
+const createErrorInvalidSession = (req, res, next) => {
+  res.status(Code.HTTP_UNAUTHORIZED);
+  res.json(createErrorRespond(Code.ERROR_INVALID_SESSION_TOKEN, 'Invalid session token', null, Code.HTTP_UNAUTHORIZED));
+}
+
 const createErrorNotAllowRequestMethod = (req, res, next) => {
   res.status(Code.HTTP_METHOD_NOT_ALLOWED);
   res.json(
@@ -59,7 +64,8 @@ const createErrorNotAllowRequestMethod = (req, res, next) => {
 }
 
 module.exports = {
-  createRespond: createRespond,
-  createErrorRespond: createErrorRespond,
-  createErrorNotAllowRequestMethod: createErrorNotAllowRequestMethod,
+  createRespond,
+  createErrorRespond,
+  createErrorNotAllowRequestMethod,
+  createErrorInvalidSession,
 };

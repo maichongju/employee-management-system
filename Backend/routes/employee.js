@@ -11,6 +11,12 @@ const exclude = prismaExclude(prisma);
 
 router.get("/:id", async (req, res, next) => {
   try {
+    // Session validation
+    let sessionInfo = await utils.getSessionInfo(req, res);
+    if (sessionInfo === null) {
+      // Invalid session
+      return;
+    }
     const id = Number(req.params.id);
     console.log(id);
     if (isNaN(id)) {
@@ -51,6 +57,12 @@ router.all("/:id", (req, res, next) => {
 /* GET Employee page. */
 router.get("/", async (req, res, next) => {
   try {
+    // Session validation
+    let sessionInfo = await utils.getSessionInfo(req, res);
+    if (sessionInfo === null) {
+      // Invalid session
+      return;
+    }
     var param = req.query;
 
     if (param.employee_id) {

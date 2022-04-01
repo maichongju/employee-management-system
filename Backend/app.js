@@ -11,7 +11,6 @@ const EmailPassword = require("supertokens-node/recipe/emailpassword");
 var Code = require('./utils/code');
 var respond = require('./utils/respond');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var employeeRouter = require('./routes/employee');
 var weatherRouter = require('./routes/weather');
 var storeRouter = require('./routes/store');
@@ -56,7 +55,6 @@ app.use('/weather', weatherRouter);
 app.use('/store', storeRouter);
 app.use('/schedule', scheduleRouter);
 app.use('/eval', evalRouter);
-app.use('/user', usersRouter);
 
 
 // catch 404 and forward to error handler

@@ -13,6 +13,12 @@ const exclude = prismaExclude(prisma);
 
 router.param("store_id", async (req, res, next, id) => {
     try {
+        // Session validation
+        let sessionInfo = await utils.getSessionInfo(req, res);
+        if (sessionInfo === null) {
+            // Invalid session
+            return;
+        }
         const store_id = Number(id);
         if (isNaN(store_id)) {
             res.status(Code.HTTP_BAD_REQUEST);
