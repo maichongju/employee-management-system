@@ -17,6 +17,7 @@ router.get("/:id", async (req, res, next) => {
       // Invalid session
       return;
     }
+
     const id = Number(req.params.id);
     console.log(id);
     if (isNaN(id)) {
@@ -63,6 +64,7 @@ router.get("/", async (req, res, next) => {
       // Invalid session
       return;
     }
+    console.log(sessionInfo);
     var param = req.query;
 
     if (param.employee_id) {

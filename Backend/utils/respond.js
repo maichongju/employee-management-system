@@ -50,7 +50,7 @@ const createErrorRespond = (code, message, e = null, http_code = Code.HTTP_BAD_R
   };
 }
 
-const createErrorInvalidSession = (req, res, next) => {
+const createErrorInvalidSession = (req, res) => {
   res.status(Code.HTTP_UNAUTHORIZED);
   res.json(createErrorRespond(Code.ERROR_INVALID_SESSION_TOKEN, 'Invalid session token', null, Code.HTTP_UNAUTHORIZED));
 }

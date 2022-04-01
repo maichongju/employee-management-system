@@ -1,5 +1,6 @@
 const { DateTime } = require("luxon");
 const Session = require("supertokens-node/recipe/session");
+const respond = require("./respond");
 
 /**
  * Extra date from string.
@@ -97,11 +98,11 @@ const verifySession = async (req, res) => {
  */
 const getSessionInfo = async (req, res) => {
     var sessionInfo = null;
-    if (!utils.isSkipAuth()) {
-        sessionInfo = await utils.verifySession(req, res);
+    if (!isSkipAuth()) {
+        sessionInfo = await verifySession(req, res);
         if (!sessionInfo.isValid) {
-            respond.createErrorInvalidSession(req, res, next);
-            return sessionInfo;
+            respond.createErrorInvalidSession(req, res);
+            return null;
         }
     } else {
         sessionInfo = {};
