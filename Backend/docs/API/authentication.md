@@ -31,7 +31,7 @@ Code: `200 OK`
   "status": 200,
   "timestamp": "2022-03-28T04:58:13.306Z",
   "content": {
-    "email": "user",
+    "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
     "timeJoined": 1648403890748
   }
@@ -84,7 +84,7 @@ POST body:
   "status": 200,
   "timestamp": "2022-03-28T04:58:13.306Z",
   "content": {
-    "email": "user",
+    "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
     "timeJoined": 1648403890748
   }
@@ -116,7 +116,7 @@ Code: `200 OK`
   "status": 200,
   "timestamp": "2022-03-28T04:58:13.306Z",
   "content": {
-    "email": "user",
+    "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
     "timeJoined": 1648403890748
   }
@@ -169,7 +169,7 @@ POST body:
   "status": 200,
   "timestamp": "2022-03-28T04:58:13.306Z",
   "content": {
-    "email": "user",
+    "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
     "timeJoined": 1648403890748
   }
@@ -228,7 +228,6 @@ Request: invalid token is provided
 **Sample Call**
 
 `POST` | `/auth/signout`
-
 
 ```json
 {
