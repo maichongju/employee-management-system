@@ -4,11 +4,13 @@ This document contain all the authentication methods that need to be use in the 
 
 `sAccessToken`, `sRefreshToken` and `sIdRefreshToken` are the three token save into user's cookie.
 
+Each employee can only have one supertokens account. When a new supertokens acount is sign up, `employee id` must be given by that time. If the employee already has a supertokens account, sign up will fail.
+
 > Please note that all the authentication method are belong to `/auth` endpoint.
 
 ## signup
 
-Create a new user with the given `username` and `password`.
+Create a new user with the given `username`, `password` and `employee_id`.
 
 **URL**: `\auth\signup`
 
@@ -21,6 +23,7 @@ Create a new user with the given `username` and `password`.
 - **required**
   - `username`: `String`
   - `password`: `String`
+  - `employee_id`: `String`|`int`
 
 ### Success Response
 
@@ -182,7 +185,7 @@ Sign out the current user.
 
 **URL**: `\auth\signout`
 
-**Method**: `POST`
+**Method**: `GET`
 
 **UTL Parameters**: None
 
@@ -227,7 +230,7 @@ Request: invalid token is provided
 
 **Sample Call**
 
-`POST` | `/auth/signout`
+`GET` | `/auth/signout`
 
 ```json
 {

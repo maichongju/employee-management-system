@@ -4,6 +4,7 @@ var Code = require("../utils/code");
 var router = express.Router();
 var weatherUtil = require("../utils/weather");
 const { extraDate } = require("../utils/utils");
+const supertokens = require("../utils/supertokens");
 
 const { PrismaClient, Prisma } = require("@prisma/client");
 const { prismaExclude } = require("prisma-exclude");
@@ -14,7 +15,7 @@ const exclude = prismaExclude(prisma);
 router.param("store_id", async (req, res, next, id) => {
     try {
         // Session validation
-        let sessionInfo = await utils.getSessionInfo(req, res);
+        let sessionInfo = await supertokens.getSessionInfo(req, res);
         if (sessionInfo === null) {
             // Invalid session
             return;

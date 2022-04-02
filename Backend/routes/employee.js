@@ -3,6 +3,7 @@ var express = require("express");
 var Code = require("../utils/code");
 var router = express.Router();
 const utils = require("../utils/utils");
+const supertokens = require("../utils/supertokens")
 
 const { PrismaClient, Prisma } = require("@prisma/client");
 const { prismaExclude } = require("prisma-exclude");
@@ -12,7 +13,7 @@ const exclude = prismaExclude(prisma);
 router.get("/:id", async (req, res, next) => {
   try {
     // Session validation
-    let sessionInfo = await utils.getSessionInfo(req, res);
+    let sessionInfo = await supertokens.getSessionInfo(req, res);
     if (sessionInfo === null) {
       // Invalid session
       return;
@@ -59,12 +60,11 @@ router.all("/:id", (req, res, next) => {
 router.get("/", async (req, res, next) => {
   try {
     // Session validation
-    let sessionInfo = await utils.getSessionInfo(req, res);
+    let sessionInfo = await supertokens.getSessionInfo(req, res);
     if (sessionInfo === null) {
       // Invalid session
       return;
     }
-    console.log(sessionInfo);
     var param = req.query;
 
     if (param.employee_id) {

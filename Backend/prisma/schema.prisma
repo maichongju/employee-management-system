@@ -28,9 +28,12 @@ model employee {
   department_id                                                                    Int                            @default(0) @db.UnsignedInt
   store_id                                                                         Int                            @db.UnsignedInt
   fulltime                                                                         Boolean
+  role_id                                                                          Int                            @db.UnsignedInt
+  supertokens_user_id                                                              String?                        @db.Char(36)
   department                                                                       departments                    @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_employee_departments")
   job                                                                              jobs                           @relation(fields: [job_id], references: [job_id], onDelete: NoAction, map: "FK_employee_jobs")
   manager                                                                          employee?                      @relation("employeeToemployee_manager_id", fields: [manager_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_employee")
+  role                                                                             role                           @relation(fields: [role_id], references: [role_id], onDelete: NoAction, map: "FK_employee_role")
   store                                                                            store                          @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
   other_manager                                                                    employee[]                     @relation("employeeToemployee_manager_id")
   employee_performance_manager_employeeToemployee_performance_manager_employee_id  employee_performance_manager[] @relation("employeeToemployee_performance_manager_employee_id")
@@ -39,12 +42,13 @@ model employee {
   schedule                                                                         schedule[]
   time_off_request_employeeTotime_off_request_employee_id                          time_off_request[]             @relation("employeeTotime_off_request_employee_id")
   time_off_request_employeeTotime_off_request_review_employee_id                   time_off_request[]             @relation("employeeTotime_off_request_review_employee_id")
-  user                                                                             user[]
 
   @@index([department_id], map: "FK_employee_departments")
   @@index([manager_id], map: "FK_employee_employee")
   @@index([job_id], map: "FK_employee_jobs")
+  @@index([role_id], map: "FK_employee_role")
   @@index([store_id], map: "FK_employee_store")
+  @@index([supertokens_user_id], map: "FK_employee_supertokens.all_auth_recipe_users")
 }
 
 model jobs {
@@ -164,21 +168,8 @@ model session {
   user_id     Int      @db.UnsignedInt
   create_time DateTime @db.DateTime(0)
   expire_time DateTime @db.DateTime(0)
-  user        user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__user")
 
   @@index([user_id], map: "FK__user")
-}
-
-model user {
-  user_id     Int       @id @db.UnsignedInt
-  employee_id Int       @db.UnsignedInt
-  username    String    @default("") @db.Char(50)
-  password    String    @default("") @db.Char(64)
-  salt        String    @default("") @db.Char(5)
-  employee    employee  @relation(fields: [employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_user_employee")
-  session     session[]
-
-  @@index([employee_id], map: "FK_user_employee")
 }
 
 model status_type {
@@ -233,14 +224,20 @@ model employee_performance_manager {
 }
 
 model sales_record {
-  id                Int      @id
+  id                Int      @id @default(autoincrement())
   sales_employee_id Int      @db.UnsignedInt
   total             Decimal  @db.Decimal(20, 2)
   store_id          Int      @db.UnsignedInt
-  time              DateTime @db.DateTime(0)
+  time              DateTime @default(now()) @db.DateTime(0)
   employee          employee @relation(fields: [sales_employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_employee")
   store             store    @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_store")
 
   @@index([sales_employee_id], map: "FK_sales_record_employee")
   @@index([store_id], map: "FK_sales_record_store")
+}
+
+model role {
+  role_id   Int        @id @default(autoincrement()) @db.UnsignedInt
+  rold_name String     @db.Char(50)
+  employee  employee[]
 }
