@@ -115,7 +115,6 @@ router.post('/signup', async (req, res, next) => {
                 supertokens_user_id: user.id
             }
         });
-        console.log(result);
     } catch (e) {
         updateSuccesses = false;
         console.log(e);

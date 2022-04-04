@@ -135,7 +135,6 @@ const forceRefreshWeather = async (store) => {
             city_id: store.city_id
         }
     });
-    console.log(deletedRecords);
     // Get the new weather data
     const weather = await weatherUtil.getWeatherForecast(store.lat, store.lon);
     // TODO what if fetch fail?
@@ -155,7 +154,6 @@ const forceRefreshWeather = async (store) => {
 
 
     );
-    console.log(insertedRecords);
     return weather;
 }
 

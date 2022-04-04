@@ -20,7 +20,6 @@ router.get("/:id", async (req, res, next) => {
     }
 
     const id = Number(req.params.id);
-    console.log(id);
     if (isNaN(id)) {
       res.status(Code.HTTP_BAD_REQUEST);
       res.json(
