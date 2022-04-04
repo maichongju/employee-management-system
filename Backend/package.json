@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --delay 5 ./bin/www",
+    "start": "nodemon ./bin/www",
     "database-update": "npx prisma db pull && npx prisma generate",
     "test": "jest"
   },
@@ -24,11 +24,19 @@
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "prisma": "^3.11.0",
-    "supertest": "^6.2.2"
+    "supertest": "^6.2.2",
+    "supertest-session": "^4.1.0"
   },
   "jest": {
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]
+  },
+  "nodemonConfig": {
+    "igonre": [
+      "./node_modules/",
+      "./test/"
+    ],
+    "delay": "5000"
   }
 }
