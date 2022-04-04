@@ -11,6 +11,7 @@ model departments {
   department_id     Int                 @id @default(autoincrement()) @db.UnsignedInt
   department_name   String              @default("") @db.Char(50)
   skill             Json
+  depatment_skill   depatment_skill[]
   employee          employee[]
   schedule          schedule[]
   store_departments store_departments[]
@@ -38,6 +39,7 @@ model employee {
   other_manager                                                                    employee[]                     @relation("employeeToemployee_manager_id")
   employee_performance_manager_employeeToemployee_performance_manager_employee_id  employee_performance_manager[] @relation("employeeToemployee_performance_manager_employee_id")
   employee_performance_manager_employeeToemployee_performance_manager_evaluator_id employee_performance_manager[] @relation("employeeToemployee_performance_manager_evaluator_id")
+  employee_skill                                                                   employee_skill?
   sales_record                                                                     sales_record[]
   schedule                                                                         schedule[]
   time_off_request_employeeTotime_off_request_employee_id                          time_off_request[]             @relation("employeeTotime_off_request_employee_id")
@@ -163,15 +165,6 @@ model store_hour {
   @@id([store_id, day])
 }
 
-model session {
-  session_id  String   @id @default("") @db.Char(50)
-  user_id     Int      @db.UnsignedInt
-  create_time DateTime @db.DateTime(0)
-  expire_time DateTime @db.DateTime(0)
-
-  @@index([user_id], map: "FK__user")
-}
-
 model status_type {
   status_id        Int                @id @default(autoincrement()) @db.TinyInt
   status           String             @db.Char(50)
@@ -210,14 +203,15 @@ model store_departments {
 }
 
 model employee_performance_manager {
-  id                                                           Int      @id @default(autoincrement())
-  employee_id                                                  Int      @db.UnsignedInt
-  evaluator_id                                                 Int      @db.UnsignedInt
+  evaluation_id                                                String                               @id @default("0") @db.VarChar(36)
+  employee_id                                                  Int                                  @db.UnsignedInt
+  evaluator_id                                                 Int                                  @db.UnsignedInt
   evaluation                                                   Json
-  comment                                                      String?  @db.Text
-  update_time                                                  DateTime @default(now()) @db.Timestamp(0)
-  employee_employeeToemployee_performance_manager_employee_id  employee @relation("employeeToemployee_performance_manager_employee_id", fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee")
-  employee_employeeToemployee_performance_manager_evaluator_id employee @relation("employeeToemployee_performance_manager_evaluator_id", fields: [evaluator_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee_2")
+  comment                                                      String?                              @db.Text
+  update_time                                                  DateTime                             @default(now()) @db.Timestamp(0)
+  employee_employeeToemployee_performance_manager_employee_id  employee                             @relation("employeeToemployee_performance_manager_employee_id", fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee")
+  employee_employeeToemployee_performance_manager_evaluator_id employee                             @relation("employeeToemployee_performance_manager_evaluator_id", fields: [evaluator_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee_2")
+  employee_performance_manager_skill                           employee_performance_manager_skill[]
 
   @@index([employee_id], map: "FK_employee_performance_manager_employee")
   @@index([evaluator_id], map: "FK_employee_performance_manager_employee_2")
@@ -240,4 +234,62 @@ model role {
   role_id   Int        @id @default(autoincrement()) @db.UnsignedInt
   rold_name String     @db.Char(50)
   employee  employee[]
+}
+
+model depatment_skill {
+  deparment_id Int         @db.UnsignedInt
+  skill_id     Int         @db.UnsignedInt
+  departments  departments @relation(fields: [deparment_id], references: [department_id], onDelete: Cascade, map: "FK_depatment_skill_departments")
+  skill        skill       @relation(fields: [skill_id], references: [skill_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_depatment_skill_skill")
+
+  @@id([deparment_id, skill_id])
+  @@index([skill_id], map: "FK_depatment_skill_skill")
+}
+
+model employee_performance_manager_skill {
+  evaluation_id                String                       @default("'0'") @db.VarChar(36)
+  skill_id                     Int                          @db.UnsignedInt
+  level                        Int
+  employee_performance_manager employee_performance_manager @relation(fields: [evaluation_id], references: [evaluation_id], onDelete: Cascade, map: "FK_employee_performance_manager_skill_performance_manager")
+  skill_level                  skill_level                  @relation(fields: [level], references: [skill_level], onDelete: Cascade, map: "FK_employee_performance_manager_skill_skill_level")
+  skill                        skill                        @relation(fields: [skill_id], references: [skill_id], onDelete: Cascade, map: "FK_employee_performance_manager_skill_skill")
+
+  @@id([evaluation_id, skill_id])
+  @@index([skill_id], map: "FK_employee_performance_manager_skill_skill")
+  @@index([level], map: "FK_employee_performance_manager_skill_skill_level")
+}
+
+model employee_skill {
+  employee_id Int         @id @db.UnsignedInt
+  skill_id    Int         @db.UnsignedInt
+  level       Int
+  employee    employee    @relation(fields: [employee_id], references: [employee_id], onDelete: Cascade, map: "FK_employee_skill_employee")
+  skill_level skill_level @relation(fields: [level], references: [skill_level], onDelete: Cascade, map: "FK_employee_skill_skill_level")
+  skill       skill       @relation(fields: [skill_id], references: [skill_id], onDelete: Cascade, map: "FK_employee_skill_skill")
+
+  @@index([skill_id], map: "FK_employee_skill_skill")
+  @@index([level], map: "FK_employee_skill_skill_level")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model foo {
+  id String? @db.Char(36)
+
+  @@ignore
+}
+
+model skill {
+  skill_id                           Int                                  @id @default(autoincrement()) @db.UnsignedInt
+  name                               String                               @db.Char(50)
+  comment                            String?                              @db.Text
+  depatment_skill                    depatment_skill[]
+  employee_performance_manager_skill employee_performance_manager_skill[]
+  employee_skill                     employee_skill[]
+}
+
+model skill_level {
+  skill_level                        Int                                  @id
+  decription                         String?                              @db.Char(50)
+  employee_performance_manager_skill employee_performance_manager_skill[]
+  employee_skill                     employee_skill[]
 }
