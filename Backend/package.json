@@ -8,7 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@prisma/client": "^3.11.0",
+    "@prisma/client": "^3.12.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
-    "prisma": "^3.11.0",
+    "prisma": "^3.12.0",
     "supertest": "^6.2.2",
     "supertest-session": "^4.1.0"
   },
