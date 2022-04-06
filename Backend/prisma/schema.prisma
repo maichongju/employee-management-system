@@ -206,7 +206,6 @@ model employee_performance_manager {
   evaluation_id                                                String                               @id @default("0") @db.VarChar(36)
   employee_id                                                  Int                                  @db.UnsignedInt
   evaluator_id                                                 Int                                  @db.UnsignedInt
-  evaluation                                                   Json
   comment                                                      String?                              @db.Text
   update_time                                                  DateTime                             @default(now()) @db.Timestamp(0)
   employee_employeeToemployee_performance_manager_employee_id  employee                             @relation("employeeToemployee_performance_manager_employee_id", fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee")
@@ -218,15 +217,15 @@ model employee_performance_manager {
 }
 
 model sales_record {
-  id                Int      @id @default(autoincrement())
-  sales_employee_id Int      @db.UnsignedInt
-  total             Decimal  @db.Decimal(20, 2)
-  store_id          Int      @db.UnsignedInt
-  time              DateTime @default(now()) @db.DateTime(0)
-  employee          employee @relation(fields: [sales_employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_employee")
-  store             store    @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_store")
+  id       Int      @id @default(autoincrement())
+  sales_id Int      @db.UnsignedInt
+  total    Decimal  @db.Decimal(20, 2)
+  store_id Int      @db.UnsignedInt
+  time     DateTime @default(now()) @db.DateTime(0)
+  employee employee @relation(fields: [sales_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_employee")
+  store    store    @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_store")
 
-  @@index([sales_employee_id], map: "FK_sales_record_employee")
+  @@index([sales_id], map: "FK_sales_record_employee")
   @@index([store_id], map: "FK_sales_record_store")
 }
 
