@@ -12,7 +12,7 @@ Each employee can only have one supertokens account. When a new supertokens acou
 
 Create a new user with the given `username`, `password` and `employee_id`.
 
-**URL**: `\auth\signup`
+**URL**: `/auth/signup`
 
 **Method**: `POST`
 
@@ -98,7 +98,7 @@ POST body:
 
 Sign in the user with the given `username` and `password`.
 
-**URL**: `\auth\signin`
+**URL**: `/auth/signin`
 
 **Method**: `POST`
 
@@ -183,7 +183,7 @@ POST body:
 
 Sign out the current user.
 
-**URL**: `\auth\signout`
+**URL**: `/auth/signout`
 
 **Method**: `GET`
 
