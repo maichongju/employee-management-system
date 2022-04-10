@@ -69,7 +69,7 @@ $file_contents = curl_exec ( $ch );
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                        <h6 class="mb-0">Conner Rocky</h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -182,7 +182,7 @@ $file_contents = curl_exec ( $ch );
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex">Conner Rocky</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -197,22 +197,33 @@ $file_contents = curl_exec ( $ch );
 
             <!-- Blank Start -->
             <div class="container-fluid pt-4 px-4">
-                <div class="row vh-100 bg-light rounded align-items-center justify-content-center mx-0">
+                <div class="row  bg-light rounded align-items-center  mx-0" style="height: 50%">
                     
                     <h6 class="mb-4">Employee Information</h6>
                    
                     <dl class="row mb-0">
                                 <dt class="col-sm-4">NAME</dt>
-                                <dd class="col-sm-8">Jhon Doe</dd>
+                                <dd class="col-sm-8">Conner Rocky</dd>
 
                                 <dt class="col-sm-4">EMAIL</dt>
-                                <dd class="col-sm-8">jhondoe@organization.com</dd>
+                                <dd class="col-sm-8">CRocky@organization.com</dd>
 
                                 <dt class="col-sm-4">ADDRESS</dt>
                                 <dd class="col-sm-8">712,Platt's Lane</dd>
 
-                                <dt class="col-sm-4 text-truncate">ROLE</dt>
-                                <dd class="col-sm-8">Flooring Associate</dd>
+                                <dt class="col-sm-4 text-truncate">REGISTERED PHONE NUMBER</dt>
+                                <dd class="col-sm-8">123456789</dd>
+
+                                <dt class="col-sm-4 text-truncate">HIRE DATE</dt>
+                                <dd class="col-sm-8">2022-03-07</dd>
+
+                                <dt class="col-sm-4 text-truncate">MANAGER</dt>
+                                <dd class="col-sm-8">Sean Gilbert</dd>
+
+
+
+
+
 
                                
                                     
@@ -232,10 +243,7 @@ $file_contents = curl_exec ( $ch );
                         <div class="col-12 col-sm-6 text-center text-sm-start">
                             &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
                         </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
