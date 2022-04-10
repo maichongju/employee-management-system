@@ -30,6 +30,11 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/default.css">
+
+<link rel="stylesheet" href="css/default.date.css">
+
+<link rel="stylesheet" href="css/default.time.css">
 </head>
 
 <body>
@@ -240,6 +245,6 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-</body>
 
+</body>
 </html>
