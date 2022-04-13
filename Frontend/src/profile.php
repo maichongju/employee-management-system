@@ -1,15 +1,28 @@
 <?php 
+$url=getBaseUrl();
 
-$ch = curl_init ();
-var_dump($ch);
-$timeout = 0; // 100; // set to zero for no timeout
-$myHITurl = "http://localhost:3000/employee";
-curl_setopt ( $ch, CURLOPT_URL, $myHITurl );
-curl_setopt ( $ch, CURLOPT_HEADER, 0 );
-curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
-$file_contents = curl_exec ( $ch );
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For HTTPS
+//curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); // For HTTPS
+$response=curl_exec($ch);
 
+echo $response; // Google's HTML source will be printed
+
+curl_close($ch);
+
+
+
+function getBaseUrl(){
+    $host_ip = getenv('BACKEND_IP');
+    $port = '3000';
+    $base_url = 'http://'.$host_ip.':'.$port."/employee";
+    echo($base_url);
+    return $base_url;
+}
+exit();
 // dump output of api if you want during test
 
 ?>

@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  php-apache:
+    container_name: php-apache
+    build: .
+    ports:
+      - 8000:80
+    volumes:
+      - './src:/var/www/html'
+  json-server:
+    container_name: json-server
+    image: clue/json-server
+    ports: 
+      - 8080:80
+    volumes:
+      - '../Backend/json-server:/data/'
