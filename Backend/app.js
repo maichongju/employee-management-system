@@ -14,6 +14,7 @@ var indexRouter = require('./routes/index');
 var employeeRouter = require('./routes/employee');
 var weatherRouter = require('./routes/weather');
 var storeRouter = require('./routes/store');
+var evalRouter = require('./routes/eval');
 var authRouter = require('./routes/auth');
 var app = express();
 app.use(cors());
@@ -51,6 +52,7 @@ app.use('/auth', authRouter);
 app.use('/employee', employeeRouter);
 app.use('/weather', weatherRouter);
 app.use('/store', storeRouter);
+app.use('/eval', evalRouter);
 
 
 

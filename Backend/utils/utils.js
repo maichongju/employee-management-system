@@ -6,7 +6,7 @@ const respond = require("./respond");
  * Extra date from string.
  * @param {string} datetime ISO datetime string or Date object
  * @param {boolean} isUTC true if datetime is UTC, otherwise will take the time as it is
- * @returns YYYY-MM-DD
+ * @returns {string | null} Date format as YYYY-MM-DD, null if invalid
  */
 const extraDate = (datetime, isUTC = true) => {
     var date;
@@ -29,7 +29,7 @@ const extraDate = (datetime, isUTC = true) => {
 /**
  * Extra time from string. 
  * @param {string} datetime datetime string 
- * @returns HH:MM:SS
+ * @returns {string | null} return time in string as HH:MM:SS, null if invalid
  */
 const extraTime = (datetime, isUTC = true) => {
 
@@ -52,8 +52,8 @@ const extraTime = (datetime, isUTC = true) => {
 }
 
 /**
- * Check if authentication is disable.
- * @returns true if authentication is required, otherwise false
+ * Check if authentication is disable. Only for development purpose.
+ * @returns {boolean} true if authentication is required, otherwise false
  */
 const isSkipAuth = () => {
     if (process.env.NODE_ENV === "development" &&
@@ -110,10 +110,24 @@ const getSessionInfo = async (req, res) => {
     return sessionInfo;
 }
 
+/**
+ * 
+ * @param {Date} date date object to be modify
+ * @param {int} hour hour to be set
+ * @param {int} min minute to be set
+ * @param {int} sec second to be set
+ */
+const setTime = (date, hour, min, sec) => {
+    date.setUTCHours(hour);
+    date.setUTCMinutes(min);
+    date.setUTCSeconds(sec);
+}
+
 module.exports = {
     extraDate,
     extraTime,
     verifySession,
     isSkipAuth,
-    getSessionInfo
+    getSessionInfo,
+    setTime
 }
