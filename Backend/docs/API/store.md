@@ -4,7 +4,7 @@
 
 Return the store that match the store number.
 
-**URL**: `\store\:store_id`
+**URL**: `/store/:store_id`
 
 **Method**: `GET`
 
