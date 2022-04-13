@@ -8,13 +8,15 @@ datasource db {
 }
 
 model departments {
-  department_id     Int                 @id @default(autoincrement()) @db.UnsignedInt
-  department_name   String              @default("") @db.Char(50)
-  skill             Json
-  depatment_skill   depatment_skill[]
-  employee          employee[]
-  schedule          schedule[]
-  store_departments store_departments[]
+  department_id           Int                       @id @default(autoincrement()) @db.UnsignedInt
+  department_name         String                    @default("") @db.Char(50)
+  depatment_skill         depatment_skill[]
+  employee                employee[]
+  sales_department_skill  sales_department_skill[]
+  sales_department_target sales_department_target[]
+  sales_record            sales_record[]
+  schedule                schedule[]
+  store_departments       store_departments[]
 }
 
 model employee {
@@ -37,9 +39,9 @@ model employee {
   role                                                                             role                           @relation(fields: [role_id], references: [role_id], onDelete: NoAction, map: "FK_employee_role")
   store                                                                            store                          @relation(fields: [store_id], references: [store_id], onDelete: NoAction, map: "FK_employee_store")
   other_manager                                                                    employee[]                     @relation("employeeToemployee_manager_id")
-  employee_performance_manager_employeeToemployee_performance_manager_employee_id  employee_performance_manager[] @relation("employeeToemployee_performance_manager_employee_id")
+  evaluation_from_manager                                                          employee_performance_manager[] @relation("employeeToemployee_performance_manager_employee_id")
   employee_performance_manager_employeeToemployee_performance_manager_evaluator_id employee_performance_manager[] @relation("employeeToemployee_performance_manager_evaluator_id")
-  employee_skill                                                                   employee_skill?
+  employee_skill                                                                   employee_skill[]
   sales_record                                                                     sales_record[]
   schedule                                                                         schedule[]
   time_off_request_employeeTotime_off_request_employee_id                          time_off_request[]             @relation("employeeTotime_off_request_employee_id")
@@ -96,19 +98,20 @@ model province {
 }
 
 model store {
-  store_id          Int                 @id @default(autoincrement()) @db.UnsignedInt
-  address           String              @db.TinyText
-  city_id           Int                 @db.UnsignedInt
-  province_id       String              @db.Char(5)
-  country_id        String              @db.Char(5)
-  post_code         String              @db.Char(10)
-  city              city                @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
-  country           country             @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
-  province          province            @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
-  employee          employee[]
-  sales_record      sales_record[]
-  store_departments store_departments[]
-  store_hour        store_hour[]
+  store_id                Int                       @id @default(autoincrement()) @db.UnsignedInt
+  address                 String                    @db.TinyText
+  city_id                 Int                       @db.UnsignedInt
+  province_id             String                    @db.Char(5)
+  country_id              String                    @db.Char(5)
+  post_code               String                    @db.Char(10)
+  city                    city                      @relation(fields: [city_id], references: [city_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_store_city")
+  country                 country                   @relation(fields: [country_id], references: [country_id], onDelete: NoAction, map: "FK_store_country")
+  province                province                  @relation(fields: [province_id], references: [province_id], onDelete: NoAction, map: "FK_store_province")
+  employee                employee[]
+  sales_department_target sales_department_target[]
+  sales_record            sales_record[]
+  store_departments       store_departments[]
+  store_hour              store_hour[]
 
   @@index([city_id], map: "FK_store_city")
   @@index([country_id], map: "FK_store_country")
@@ -210,21 +213,25 @@ model employee_performance_manager {
   update_time                                                  DateTime                             @default(now()) @db.Timestamp(0)
   employee_employeeToemployee_performance_manager_employee_id  employee                             @relation("employeeToemployee_performance_manager_employee_id", fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee")
   employee_employeeToemployee_performance_manager_evaluator_id employee                             @relation("employeeToemployee_performance_manager_evaluator_id", fields: [evaluator_id], references: [employee_id], onDelete: NoAction, map: "FK_employee_performance_manager_employee_2")
-  employee_performance_manager_skill                           employee_performance_manager_skill[]
+  skills                                                       employee_performance_manager_skill[]
 
   @@index([employee_id], map: "FK_employee_performance_manager_employee")
   @@index([evaluator_id], map: "FK_employee_performance_manager_employee_2")
 }
 
 model sales_record {
-  id       Int      @id @default(autoincrement())
-  sales_id Int      @db.UnsignedInt
-  total    Decimal  @db.Decimal(20, 2)
-  store_id Int      @db.UnsignedInt
-  time     DateTime @default(now()) @db.DateTime(0)
-  employee employee @relation(fields: [sales_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_employee")
-  store    store    @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_store")
+  id            Int          @id @default(autoincrement())
+  sales_id      Int          @db.UnsignedInt
+  total         Decimal      @db.Decimal(20, 2)
+  store_id      Int          @db.UnsignedInt
+  department_id Int?         @db.UnsignedInt
+  time          DateTime     @default(now()) @db.DateTime(0)
+  date          DateTime     @default(dbgenerated("(curdate())")) @db.Date
+  departments   departments? @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_departments")
+  employee      employee     @relation(fields: [sales_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_employee")
+  store         store        @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_record_store")
 
+  @@index([department_id], map: "FK_sales_record_departments")
   @@index([sales_id], map: "FK_sales_record_employee")
   @@index([store_id], map: "FK_sales_record_store")
 }
@@ -259,13 +266,15 @@ model employee_performance_manager_skill {
 }
 
 model employee_skill {
-  employee_id Int         @id @db.UnsignedInt
+  employee_id Int         @db.UnsignedInt
   skill_id    Int         @db.UnsignedInt
   level       Int
+  raw_value   Float       @default(0) @db.Float
   employee    employee    @relation(fields: [employee_id], references: [employee_id], onDelete: Cascade, map: "FK_employee_skill_employee")
   skill_level skill_level @relation(fields: [level], references: [skill_level], onDelete: Cascade, map: "FK_employee_skill_skill_level")
   skill       skill       @relation(fields: [skill_id], references: [skill_id], onDelete: Cascade, map: "FK_employee_skill_skill")
 
+  @@id([employee_id, skill_id])
   @@index([skill_id], map: "FK_employee_skill_skill")
   @@index([level], map: "FK_employee_skill_skill_level")
 }
@@ -284,6 +293,7 @@ model skill {
   depatment_skill                    depatment_skill[]
   employee_performance_manager_skill employee_performance_manager_skill[]
   employee_skill                     employee_skill[]
+  sales_department_skill             sales_department_skill[]
 }
 
 model skill_level {
@@ -291,4 +301,27 @@ model skill_level {
   decription                         String?                              @db.Char(50)
   employee_performance_manager_skill employee_performance_manager_skill[]
   employee_skill                     employee_skill[]
+}
+
+model sales_department_skill {
+  department_id Int         @db.UnsignedInt
+  skill_id      Int         @db.UnsignedInt
+  weight        Float       @default(1) @db.Float
+  departments   departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_department_skill_departments")
+  skill         skill       @relation(fields: [skill_id], references: [skill_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_department_skill_skill")
+
+  @@id([department_id, skill_id])
+  @@index([skill_id], map: "FK_sales_department_skill_skill")
+}
+
+model sales_department_target {
+  store_id        Int         @db.UnsignedInt
+  department_id   Int         @db.UnsignedInt
+  target_quantity Int         @default(0)
+  target_value    Decimal     @default(0.00) @db.Decimal(20, 2)
+  departments     departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_department_target_departments")
+  store           store       @relation(fields: [store_id], references: [store_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_sales_department_target_store")
+
+  @@id([department_id, store_id])
+  @@index([store_id], map: "FK_sales_department_target_store")
 }
