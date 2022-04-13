@@ -1,3 +1,36 @@
+<?php
+function getBaseUrl(){
+    $host_ip = getenv('BACKEND_IP');
+    $port = '3000';
+    $base_url = 'http://'.$host_ip.':'.$port."/auth/signin";
+    echo($base_url);
+    return $base_url;
+}
+
+$data = array(
+    "username"=> "user",
+  "password"=> "password"
+);
+
+
+var_dump($data);
+
+$ch= curl_init(getBaseUrl());
+curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+curl_setopt($ch, CURLOPT_COOKIEJAR, './cookies.txt');
+curl_setopt($ch, CURLOPT_COOKIEFILE, './cookies.txt');
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$result= curl_exec($ch);
+
+curl_close($ch);
+echo($result);
+
+
+exit();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,19 +87,21 @@
                             <h3>Sign In</h3>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <form class="login"name="loginForm" onsubmit="returnvalidateLoginForm()" method="POST">
+                            <input type="email" class="form-control" name="floatingInput" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <input type="password" class="form-control" name="floatingPassword" id="floatingPassword" placeholder="Password">
                             <label for="floatingPassword">Password</label>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             
                             <a href="">Forgot Password</a>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
-                        <p class="text-center mb-0">Don't have an Account? <a href="">Sign Up</a></p>
+                        <button type="submit" value= "login" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
+                       </form>
+                        
                     </div>
                 </div>
             </div>
@@ -88,5 +123,37 @@
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
 </body>
+<script>
+    function returnvalidateLoginForm(){
+    var uname = document.getElementById("floatingInput").value;
+		var pwd = document.getElementById("floatingPassword").value;
+		var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if(uname =='')
+		{
+			alert("please enter user name.");
+		}
+		else if(pwd=='')
+		{
+        	alert("enter the password");
+		}
+		else if(!filter.test(uname))
+		{
+			alert("Enter valid email id.");
+		}
+		
+		else
+		{
+	alert('Thank You for Login');
+  //Redirecting to other page or webste code or you can set your own html page.
+       window.location = "localhost:8000/profile.php";
+			}
+	}
+	//Reset Inputfield code.
+	function clearFunc()
+	{
+		document.getElementById("floatingInput").value="";
+		document.getElementById("floatingPassword").value="";
+	}	
+</script>
 
 </html>

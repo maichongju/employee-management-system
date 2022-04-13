@@ -14,7 +14,6 @@ var indexRouter = require('./routes/index');
 var employeeRouter = require('./routes/employee');
 var weatherRouter = require('./routes/weather');
 var storeRouter = require('./routes/store');
-// var scheduleRouter = require('./routes/schedule');
 var evalRouter = require('./routes/eval');
 var authRouter = require('./routes/auth');
 var app = express();
@@ -53,8 +52,8 @@ app.use('/auth', authRouter);
 app.use('/employee', employeeRouter);
 app.use('/weather', weatherRouter);
 app.use('/store', storeRouter);
-// app.use('/schedule', scheduleRouter);
 app.use('/eval', evalRouter);
+
 
 
 // catch 404 and forward to error handler
