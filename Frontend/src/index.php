@@ -3,7 +3,7 @@ function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
     $base_url = 'http://'.$host_ip.':'.$port."/auth/signin";
-    echo($base_url);
+    //echo($base_url);
     return $base_url;
 }
 
@@ -13,7 +13,7 @@ $data = array(
 );
 
 
-var_dump($data);
+//var_dump($data);
 
 $ch= curl_init(getBaseUrl());
 curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
@@ -21,12 +21,84 @@ curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
 curl_setopt($ch, CURLOPT_COOKIEJAR, './cookies.txt');
 curl_setopt($ch, CURLOPT_COOKIEFILE, './cookies.txt');
+curl_setopt($ch, CURLOPT_COOKIESESSION, 1);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-$result= curl_exec($ch);
 
+$result= curl_exec($ch);
+settingCook();
 curl_close($ch);
-echo($result);
+//echo($result);
+
+
+
+function settingCook(){
+    $i=0;
+    $content=file('./cookies.txt');
+    $cookiesArr=extractCookies($content);
+//var_dump($cookiesArr);
+
+        foreach ($cookiesArr as $line){
+            $name = array_column($cookiesArr, 'name');
+            $value = array_column($cookiesArr, 'value');
+        }
+
+        foreach ($name as $names){
+            
+            $cookie_name=$names;
+            $cookie_value=$value[$i];
+           // var_dump($cookie_name);
+            $i++;
+            setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
+
+        }
+}
+
+
+function extractCookies($lines) {
+  // var_dump($string);
+  $cookiesArr=array();
+   foreach($lines as $line) {
+   
+        $cookie = array();
+
+        // detect httponly cookies and remove #HttpOnly prefix
+        if (substr($line, 0, 10) == '#HttpOnly_') {
+            $line = substr($line, 10);
+           // $cookie['httponly'] = true;
+        } else {
+           // $cookie['httponly'] = false;
+        } 
+
+        // we only care for valid cookie def lines
+        if( strlen( $line ) > 0 && $line[0] != '#' && substr_count($line, "\t") == 6) {
+
+            // get tokens in an array
+            $tokens = explode("\t", $line);
+
+            // trim the tokens
+            $tokens = array_map('trim', $tokens);
+
+           
+            $cookie['name'] = urldecode($tokens[5]);   // The name of the variable.
+            $cookie['value'] = urldecode($tokens[6]);  // The value of the variable.
+
+            // Convert date to a readable format
+
+            // Record the cookie.
+            $cookies[]= $cookie;
+           //var_dump($cookies);
+           
+           
+        }
+        
+    
+    }
+    //var_dump($cookies);
+    return $cookies;
+   
+}
+
 
 
 exit();
