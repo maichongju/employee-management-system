@@ -9,7 +9,6 @@ const getTimeStamp = () => {
 const extraPrismaClientValidationErrorInfo = (e) => {
   const lines = e.message.split('\n');
   for (var msg of lines) {
-    console.log(msg)
     if (msg.startsWith('Unknown')) {
       return msg.split(' ')[2];
     }
