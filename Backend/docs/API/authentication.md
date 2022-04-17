@@ -23,7 +23,7 @@ Create a new user with the given `username`, `password` and `employee_id`.
 - **required**
   - `username`: `String`
   - `password`: `String`
-  - `employee_id`: `String`|`int`
+  - `employeeID`: `String`|`int`
 
 ### Success Response
 
@@ -79,7 +79,7 @@ POST body:
 {
   "username": "user",
   "password": "password",
-  "employee_id": "1000000"
+  "employeeID": "1000000"
 }
 ```
 
