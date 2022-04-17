@@ -78,7 +78,8 @@ POST body:
 ```json
 {
   "username": "user",
-  "password": "password"
+  "password": "password",
+  "employee_id": "1000000"
 }
 ```
 
