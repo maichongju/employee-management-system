@@ -36,7 +36,9 @@ Code: `200 OK`
   "content": {
     "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
-    "timeJoined": 1648403890748
+    "timeJoined": 1648403890748,
+    "employee_id": 1000000,
+    "role": 1
   }
 }
 ```
@@ -49,6 +51,8 @@ Field Description:
   - `email`: username of the user
   - `id`: id of the user
   - `timeJoined`: time when the user was created
+  - `employee_id`: employee id of the user
+  - `role`: role of the user
 
 **Error Response**:
 
@@ -90,7 +94,9 @@ POST body:
   "content": {
     "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
-    "timeJoined": 1648403890748
+    "timeJoined": 1648403890748,
+    "employee_id": 1000000,
+    "role": 1
   }
 }
 ```
@@ -122,7 +128,9 @@ Code: `200 OK`
   "content": {
     "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
-    "timeJoined": 1648403890748
+    "timeJoined": 1648403890748,
+    "employee_id": 1000000,
+    "role": 1
   }
 }
 ```
@@ -175,7 +183,9 @@ POST body:
   "content": {
     "username": "user",
     "id": "66aef16f-3c1d-43a7-a968-aeb42aba9d05",
-    "timeJoined": 1648403890748
+    "timeJoined": 1648403890748,
+    "employee_id": 1000000,
+    "role": 1
   }
 }
 ```
