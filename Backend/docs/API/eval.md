@@ -30,7 +30,8 @@ Code: `200 OK`
 {
   "status": 200,
   "timestamp": "2022-04-13T06:25:37.652Z",
-  "content": [
+  "content":{
+    "evaluation": [
     {
       "employee_id": 1000000,
       "skills": "skills": [
@@ -51,8 +52,29 @@ Code: `200 OK`
           "level": 4
         }
       ]
-    }
+    },
+    "skills": [
+      {
+        "skill_id": 1,
+        "name": "sales_general"
+      },
+      {
+        "skill_id": 2,
+        "name": "communication"
+      },
+      {
+        "skill_id": 3,
+        "name": "tech"
+      },
+      {
+        "skill_id": 4,
+        "name": "cashier_speed"
+      }
+    ]
   ]
+
+  }
+
 }
 ```
 
@@ -61,8 +83,14 @@ Field Description:
 - `status`: HTTP status code
 - `timestamp`: timestamp of the response
 - `content`: content of the response
-  - `employee_id`: ID of the employee
-  - `skills`: list of skills and their level - `skill_id`: ID of the skill - `level`: level of the skill
+  - `evaluation`: list of evaluation for each employee
+    - `employee_id`: ID of the employee
+    - `skills`: list of skills for each employee
+      - `skill_id`: ID of the skill
+      - `level`: level of the skill
+  - `skills`: list of skills and their level
+    - `skill_id`: ID of the skill
+    - `level`: level of the skill
 
 **Error Response**:
 
@@ -111,100 +139,120 @@ Request: `POST` | `/eval/store/0`
 ```json
 {
   "status": 200,
-  "timestamp": "2022-04-13T22:53:01.815Z",
-  "content": [
-    {
-      "employee_id": 1000000,
-      "skills": []
-    },
-    {
-      "employee_id": 1000001,
-      "skills": [
-        {
-          "skill_id": 1,
-          "level": 3.333333333333333
-        },
-        {
-          "skill_id": 2,
-          "level": 3.333333333333333
-        },
-        {
-          "skill_id": 3,
-          "level": 4
-        },
-        {
-          "skill_id": 4,
-          "level": 4
-        }
-      ]
-    },
-    {
-      "employee_id": 1000002,
-      "skills": [
-        {
-          "skill_id": 1,
-          "level": 0.8008
-        },
-        {
-          "skill_id": 2,
-          "level": 0.8008
-        },
-        {
-          "skill_id": 3,
-          "level": 0.8008
-        }
-      ]
-    },
-    {
-      "employee_id": 1000003,
-      "skills": []
-    },
-    {
-      "employee_id": 1000004,
-      "skills": []
-    },
-    {
-      "employee_id": 1000005,
-      "skills": [
-        {
-          "skill_id": 1,
-          "level": 0.56
-        },
-        {
-          "skill_id": 2,
-          "level": 0.56
-        },
-        {
-          "skill_id": 3,
-          "level": 0.56
-        }
-      ]
-    },
-    {
-      "employee_id": 1000006,
-      "skills": []
-    },
-    {
-      "employee_id": 1000007,
-      "skills": []
-    },
-    {
-      "employee_id": 1000008,
-      "skills": []
-    },
-    {
-      "employee_id": 1000009,
-      "skills": []
-    },
-    {
-      "employee_id": 1000010,
-      "skills": []
-    },
-    {
-      "employee_id": 1000011,
-      "skills": []
-    }
-  ]
+  "timestamp": "2022-04-23T21:28:03.107Z",
+  "content": {
+    "evaluation": [
+      {
+        "employee_id": 1000000,
+        "skills": []
+      },
+      {
+        "employee_id": 1000001,
+        "skills": [
+          {
+            "skill_id": 1,
+            "level": 3.333333333333333
+          },
+          {
+            "skill_id": 2,
+            "level": 3.333333333333333
+          },
+          {
+            "skill_id": 3,
+            "level": 4
+          },
+          {
+            "skill_id": 4,
+            "level": 4
+          }
+        ]
+      },
+      {
+        "employee_id": 1000002,
+        "skills": [
+          {
+            "skill_id": 1,
+            "level": 0.8008
+          },
+          {
+            "skill_id": 2,
+            "level": 0.8008
+          },
+          {
+            "skill_id": 3,
+            "level": 0.8008
+          }
+        ]
+      },
+      {
+        "employee_id": 1000003,
+        "skills": []
+      },
+      {
+        "employee_id": 1000004,
+        "skills": []
+      },
+      {
+        "employee_id": 1000005,
+        "skills": [
+          {
+            "skill_id": 1,
+            "level": 0.56
+          },
+          {
+            "skill_id": 2,
+            "level": 0.56
+          },
+          {
+            "skill_id": 3,
+            "level": 0.56
+          }
+        ]
+      },
+      {
+        "employee_id": 1000006,
+        "skills": []
+      },
+      {
+        "employee_id": 1000007,
+        "skills": []
+      },
+      {
+        "employee_id": 1000008,
+        "skills": []
+      },
+      {
+        "employee_id": 1000009,
+        "skills": []
+      },
+      {
+        "employee_id": 1000010,
+        "skills": []
+      },
+      {
+        "employee_id": 1000011,
+        "skills": []
+      }
+    ],
+    "skills": [
+      {
+        "skill_id": 1,
+        "name": "sales_general"
+      },
+      {
+        "skill_id": 2,
+        "name": "communication"
+      },
+      {
+        "skill_id": 3,
+        "name": "tech"
+      },
+      {
+        "skill_id": 4,
+        "name": "cashier_speed"
+      }
+    ]
+  }
 }
 ```
 
@@ -229,21 +277,39 @@ Code: `200 OK`
 ```json
 {
   "status": 200,
-  "timestamp": "2022-04-13T23:01:40.933Z",
+  "timestamp": "2022-04-23T21:36:17.869Z",
   "content": {
-    "employee_id": 1000002,
+    "evaluation": [
+      {
+        "employee_id": 1000002,
+        "skills": [
+          {
+            "skill_id": 1,
+            "level": 0.8008
+          },
+          {
+            "skill_id": 2,
+            "level": 0.8008
+          },
+          {
+            "skill_id": 3,
+            "level": 0.8008
+          }
+        ]
+      }
+    ],
     "skills": [
       {
         "skill_id": 1,
-        "level": 0.8008
+        "name": "sales_general"
       },
       {
         "skill_id": 2,
-        "level": 0.8008
+        "name": "communication"
       },
       {
         "skill_id": 3,
-        "level": 0.8008
+        "name": "tech"
       }
     ]
   }
@@ -255,8 +321,12 @@ Field Description:
 - `status`: HTTP status code
 - `timestamp`: timestamp of the response
 - `content`: content of the response
-  - `employee_id`: ID of the employee
-  - `skills`: list of skills and their level
+  - `evaluation`: list of evaluation for each employee
+    - `employee_id`: ID of the employee
+    - `skills`: list of skills for each employee
+      - `skill_id`: ID of the skill
+      - `level`: level of the skill
+  - `skills`: list of skills for each employee
     - `skill_id`: ID of the skill
     - `level`: level of the skill
 
@@ -307,21 +377,39 @@ Request: `POST` | `/eval/employee/100000`
 ```json
 {
   "status": 200,
-  "timestamp": "2022-04-13T23:01:40.933Z",
+  "timestamp": "2022-04-23T21:36:17.869Z",
   "content": {
-    "employee_id": 1000002,
+    "evaluation": [
+      {
+        "employee_id": 1000002,
+        "skills": [
+          {
+            "skill_id": 1,
+            "level": 0.8008
+          },
+          {
+            "skill_id": 2,
+            "level": 0.8008
+          },
+          {
+            "skill_id": 3,
+            "level": 0.8008
+          }
+        ]
+      }
+    ],
     "skills": [
       {
         "skill_id": 1,
-        "level": 0.8008
+        "name": "sales_general"
       },
       {
         "skill_id": 2,
-        "level": 0.8008
+        "name": "communication"
       },
       {
         "skill_id": 3,
-        "level": 0.8008
+        "name": "tech"
       }
     ]
   }
