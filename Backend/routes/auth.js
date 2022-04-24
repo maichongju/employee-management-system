@@ -44,7 +44,8 @@ router.post('/signin', async (req, res, next) => {
         employee_id: employee.employee_id,
     };
     await Session.createNewSession(res, userid, tokenData);
-
+    user["employee_id"] = employee.employee_id;
+    user["role"] = employee.role_id;
     res.json(respond.createRespond(user));
 
 });
@@ -131,6 +132,8 @@ router.post('/signup', async (req, res, next) => {
         employee_id: employee.employee_id,
     };
     await Session.createNewSession(res, user.id, tokenData);
+    user["employee_id"] = employee.employee_id;
+    user["role"] = employee.role_id;
     res.json(respond.createRespond(user));
 });
 
