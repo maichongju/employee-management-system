@@ -10,7 +10,7 @@ function getBaseUrl(){
 //function signUp(){
 
         $data = array(
-            "username"=> "test@mail.com",
+            "username"=> "user",
             "password"=> "password",
             "employeeID"=> "1000000",
         );

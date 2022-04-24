@@ -1,5 +1,50 @@
-
 <?php 
+session_start();
+//echo $_SESSION["name"] ;
+//exit();
+$url=getBaseUrl();
+echo $url;
+$vars= $_COOKIE["sIdRefreshToken"];
+$vars2= $_COOKIE["sRefreshToken"];
+$vars3= $_COOKIE["sAccessToken"];
+$vars4=$_COOKIE["PHPSESSID"];
+
+
+$curl = curl_init($url);
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_VERBOSE, 1); 
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+$headers = array(
+    "Cookie: sIdRefreshToken" . $vars . 
+    "; sRefreshToken" . $vars2 . 
+    "; sAccessToken" . $vars3
+     ."; PHPSESSID=". $vars4);
+//var_dump($headers);
+//curl_setopt($curl, CURLOPT_HEADER, TRUE);
+curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+$resp = curl_exec($curl);
+$resp=json_decode($resp);
+$resp=($resp->content);
+
+
+var_dump($resp);
+curl_close($curl);
+//exit();
+
+
+function getBaseUrl(){
+    $host_ip = getenv('BACKEND_IP');
+    $port = '3000';
+    $base_url = 'http://'.$host_ip.':'.$port."/eval/employee/".$_SESSION["ID"];
+    //echo($base_url);
+    return $base_url;
+}
+//exit();
+// dump output of api if you want during test
 
 ?>
 <!DOCTYPE html>
@@ -7,8 +52,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Calendar
-    </title>
+    <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -34,11 +78,6 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/default.css">
-
-<link rel="stylesheet" href="css/default.date.css">
-
-<link rel="stylesheet" href="css/default.time.css">
 </head>
 
 <body>
@@ -64,7 +103,7 @@
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0"><?php echo $_SESSION["name"]; ?></h6>
+                        <h6 class="mb-0"><?php echo $_SESSION["name"] ;?></h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -177,7 +216,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex">Conner Rocky</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -190,27 +229,21 @@
             <!-- Navbar End -->
 
 
-            <!-- Chart Start -->
-            <div class="container-fluid pt-4 px-4"style="height: 80%">
-                
+            <!-- Blank Start -->
+            <div class="container-fluid pt-4 px-4"style="height: 100%">
+                <div class="row  bg-light rounded align-items-center  mx-0" >
                     
-                     
-                    
-                        <div class="h-100 bg-light rounded p-4" style="height: 80%">
-                            <div class="d-flex align-items-center justify-content-between mb-4" >
-                                <h6 class="mb-0">Calender</h6>
-                                <a href="">Show All</a>
-                            </div>
-                            <div id="calender"style="height: 80%"></div>
-                            
-                        </div>
-                    
+                    <h6 class="mb-4">Employee Information</h6>
                    
                    
-                   
-                
+
+                               
+                                    
+
+
+                </div>
             </div>
-            <!-- Chart End -->
+            <!-- Blank End -->
 
 
             <!-- Footer Start -->
@@ -220,10 +253,7 @@
                         <div class="col-12 col-sm-6 text-center text-sm-start">
                             &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
                         </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -249,6 +279,6 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-
 </body>
+
 </html>

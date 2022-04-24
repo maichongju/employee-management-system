@@ -1,4 +1,5 @@
 <?php
+session_start();
 function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
@@ -48,10 +49,22 @@ function getBaseUrl(){
         $cookie_name=$key;
         $cookie_value=$value;
     
-      //  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
+      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
     }
+ 
+    
+       
+         $html= json_decode($html);
+         $details= ($html->content);       
+       $_SESSION["ID"]=($details->employee_id);
+       $_SESSION["role"]=($details->role);
+     
+      //  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
+  
+ var_dump($_SESSION["ID"]);
+ var_dump($_SESSION["role"]);
 curl_close($ch);
-var_dump($html);
+//var_dump($html);
 exit();
 //}
 

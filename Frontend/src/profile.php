@@ -1,29 +1,45 @@
 <?php 
+session_start();
 $url=getBaseUrl();
+$vars= $_COOKIE["sIdRefreshToken"];
+$vars2= $_COOKIE["sRefreshToken"];
+$vars3= $_COOKIE["sAccessToken"];
+$vars4=$_COOKIE["PHPSESSID"];
 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // For HTTPS
-//curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); // For HTTPS
-$response=curl_exec($ch);
 
-echo $response; // Google's HTML source will be printed
+$curl = curl_init($url);
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_VERBOSE, 1); 
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-curl_close($ch);
+$headers = array(
+    "Cookie: sIdRefreshToken" . $vars . 
+    "; sRefreshToken" . $vars2 . 
+    "; sAccessToken" . $vars3
+     ."; PHPSESSID=". $vars4);
+//var_dump($headers);
+//curl_setopt($curl, CURLOPT_HEADER, TRUE);
+curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
+$resp = curl_exec($curl);
+$resp=json_decode($resp);
+$resp=($resp->content);
+$_SESSION["name"]=($resp->first_name)." ".($resp->last_name);
+
+//var_dump($resp);
+curl_close($curl);
+//exit();
 
 
 function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
-    $base_url = 'http://'.$host_ip.':'.$port."/employee";
-    echo($base_url);
+    $base_url = 'http://'.$host_ip.':'.$port."/employee/".$_SESSION["ID"];
+    //echo($base_url);
     return $base_url;
 }
-exit();
-// dump output of api if you want during test
 
 ?>
 <!DOCTYPE html>
@@ -82,33 +98,33 @@ exit();
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Conner Rocky</h6>
+                        <h6 class="mb-0"><?php echo ($resp->first_name)." "; echo ($resp->last_name) ;?></h6>
                         <span>Admin</span>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Details</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                            <a href="http://localhost:8000/profile.php" class="dropdown-item">Profile</a>
+                            <a href="http://localhost:8000/calendar.php" class="dropdown-item">Schedule</a>
+                            <a href="http://localhost:8000/eval.php" class="dropdown-item">Evaluation</a>
                         </div>
                     </div>
-                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Time-off</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="signin.html" class="dropdown-item">Request Time-off</a>
+                            <a href="signup.html" class="dropdown-item">Approve Time-off</a>
+                        </div>
+                    </div>
+                    
+                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Salary slip</a>
                     <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
                     <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
                     <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item active">Blank Page</a>
-                        </div>
-                    </div>
+                   
                 </div>
             </nav>
         </div>
@@ -209,30 +225,44 @@ exit();
 
 
             <!-- Blank Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="row  bg-light rounded align-items-center  mx-0" style="height: 50%">
+            <div class="container-fluid pt-4 px-4"style="height: 100%">
+                <div class="row  bg-light rounded align-items-center  mx-0" >
                     
                     <h6 class="mb-4">Employee Information</h6>
                    
                     <dl class="row mb-0">
-                                <dt class="col-sm-4">NAME</dt>
-                                <dd class="col-sm-8">Conner Rocky</dd>
+                                <dt class="col-sm-4">FIRST NAME</dt>
+                                <dd class="col-sm-8"><?php echo ($resp->first_name);?></dd>
+
+                                <dt class="col-sm-4">LAST NAME</dt>
+                                <dd class="col-sm-8"><?php echo ($resp->last_name);?></dd>
 
                                 <dt class="col-sm-4">EMAIL</dt>
-                                <dd class="col-sm-8">CRocky@organization.com</dd>
+                                <dd class="col-sm-8"><?php echo ($resp->email);?></dd>
 
                                 <dt class="col-sm-4">ADDRESS</dt>
                                 <dd class="col-sm-8">712,Platt's Lane</dd>
 
                                 <dt class="col-sm-4 text-truncate">REGISTERED PHONE NUMBER</dt>
-                                <dd class="col-sm-8">123456789</dd>
+                                <dd class="col-sm-8"><?php echo ($resp->phone_number);?></dd>
+                                 
+                                <dt class="col-sm-4 text-truncate">HIRE DATE</dt>
+                                <dd class="col-sm-8"><?php echo ($resp->hire_date);?></dd>
+
+                                <dt class="col-sm-4 text-truncate">DEPARTMENT</dt>
+                                <dd class="col-sm-8"><?php echo ($resp->department->department_name);?></dd>
 
                                 <dt class="col-sm-4 text-truncate">HIRE DATE</dt>
-                                <dd class="col-sm-8">2022-03-07</dd>
+                                <dd class="col-sm-8"><?php echo ($resp->job->job_title);?></dd>
 
                                 <dt class="col-sm-4 text-truncate">MANAGER</dt>
-                                <dd class="col-sm-8">Sean Gilbert</dd>
+                                <dd class="col-sm-8"><?php echo ($resp->manager);?></dd>
 
+                                <dt class="col-sm-4 text-truncate">WORK LOCATION</dt>
+                                <dd class="col-sm-8"><?php echo ($resp->store->address).",". ($resp->store->province_id); ?></dd>
+
+                                <dt class="col-sm-4 text-truncate">Country</dt>
+                                <dd class="col-sm-8"><?php echo ($resp->store->country_id); ?></dd>
 
 
 
