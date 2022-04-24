@@ -237,9 +237,9 @@ const processSales = async (store_id, start_date, end_date = undefined) => {
     }
 
     for (const employeeID in evaluation) {
-        let eval = evaluation[employeeID];
-        for (const skillID in eval) {
-            eval[skillID] = eval[skillID].score / eval[skillID].count;
+        let individualEval = evaluation[employeeID];
+        for (const skillID in individualEval) {
+            individualEval[skillID] = individualEval[skillID].score / individualEval[skillID].count;
         }
     }
 
