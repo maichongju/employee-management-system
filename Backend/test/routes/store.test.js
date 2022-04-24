@@ -12,7 +12,7 @@ describe("GET /store log in employee", () => {
             .expect(200)
             .end(done);
     })
-    it("valid store number", (done) => {
+    it("TC-2: valid store number", (done) => {
         agent.get("/store/1")
             .expect(200)
             .expect((res) => {
@@ -20,6 +20,24 @@ describe("GET /store log in employee", () => {
             })
             .end(done);
 
+    })
+
+    it("TC-3: store not found", (done) => {
+        agent.get("/store/100")
+            .expect(400)
+            .expect((res) => {
+                expect(res.body.error.code).toBe("V1006")
+            })
+            .end(done);
+    })
+
+    it("TC-4: Invalid store input (Nan)", (done) => {
+        agent.get("/store/random")
+            .expect(400)
+            .expect((res) => {
+                expect(res.body.error.code).toBe("V1001")
+            })
+            .end(done);
     })
 
     afterAll((done) => {
@@ -30,7 +48,7 @@ describe("GET /store log in employee", () => {
 })
 
 describe("GET /store no log in", () => {
-    it("valid store number no auth", (done) => {
+    it("TC-1:valid store number no auth", (done) => {
         agent.get("/store/1")
             .expect(401)
             .expect((res) => {
