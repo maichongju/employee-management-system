@@ -38,7 +38,7 @@ function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
     $id = 1;
-    $base_url = 'http://'.$host_ip.':'.$port.'/schedule';
+    $base_url = 'http://'.$host_ip.':'.$port.'/schedule/employee/'.$_SESSION["ID"];
     //echo($base_url);
     return $base_url;
 }
@@ -49,10 +49,10 @@ $data_read = file_get_contents('ScheduleIndividualtxt.txt');
   $data_read=json_decode($data_read);
   $schedule=($data_read->content->schedule);
 
- // var_dump($schedule);
+ var_dump($schedule);
 
 fclose($fh);
-//exit();
+exit();
 ?>
 <!DOCTYPE html>
 <html lang="en">
