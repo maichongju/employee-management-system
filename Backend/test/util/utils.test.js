@@ -36,3 +36,23 @@ describe("extra time (Tested with UTF-4) Could fail if different timezone", () =
         expect(utils.extraTime(datetime,isUTC)).toBe(expected);
     });
 })
+
+setTimeCase = [
+    [0,0,0],
+    [23,59,59],
+    [0,59,59],
+    [0,0,59],
+    [23,59,0],
+    [23,0,0]
+]
+
+describe("Test setTime()", () => {
+    it.each(setTimeCase)("%s, %s, %s", (hour,minute,second) => {
+        let date = new Date();
+        let date2 = utils.setTime(date,hour,minute,second);
+        expect(date2.getUTCHours()).toBe(hour);
+        expect(date2.getUTCMinutes()).toBe(minute);
+        expect(date2.getUTCSeconds()).toBe(second);
+        expect(date === date2).toBe(false);
+    });
+})

@@ -16,7 +16,7 @@ Create a new user with the given `username`, `password` and `employee_id`.
 
 **Method**: `POST`
 
-**UTL Parameters**: None
+**URL Parameters**: None
 
 **Data Parameters**:
 
@@ -109,7 +109,7 @@ Sign in the user with the given `username` and `password`.
 
 **Method**: `POST`
 
-**UTL Parameters**: None
+**URL Parameters**: None
 
 **Data Parameters**:
 
@@ -198,7 +198,7 @@ Sign out the current user.
 
 **Method**: `GET`
 
-**UTL Parameters**: None
+**URL Parameters**: None
 
 **Data Parameters**: None
 

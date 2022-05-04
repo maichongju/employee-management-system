@@ -8,7 +8,7 @@ Return the store that match the store number.
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 - **required** -`store_id`: store id for the store
 
@@ -240,7 +240,7 @@ Return the employee that match the given criteria.
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 - **required**
   - `store_id`: ID of the store

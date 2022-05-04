@@ -8,7 +8,7 @@ Return the employee that match the given criteria.
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 - **required**
   - `store`: ID of the store
