@@ -110,17 +110,48 @@ const getSessionInfo = async (req, res) => {
     return sessionInfo;
 }
 
+// TODO update function setTime to return a new Date object
 /**
  * 
  * @param {Date} date date object to be modify
  * @param {int} hour hour to be set
  * @param {int} min minute to be set
  * @param {int} sec second to be set
+ * @returns {Date} a new Date object contain the new time
  */
-const setTime = (date, hour, min, sec) => {
-    date.setUTCHours(hour);
-    date.setUTCMinutes(min);
-    date.setUTCSeconds(sec);
+const setTime = (date, hour, min = 0, sec = 0) => {
+    const newDate = new Date(date);
+    newDate.setUTCHours(hour);
+    newDate.setUTCMinutes(min);
+    newDate.setUTCSeconds(sec);
+    return newDate;
+}
+
+/**
+ * Set the given date value to the beginning of the day. (00:00:00)
+ * @param {Date} date 
+ * @returns {Date} a new Date object contain the new time
+ */
+const setDateBeginningOfDay = (date) => {
+    return setTime(date, 0, 0, 0);
+}
+
+/**
+ * Set the given data object to the end of the day. (23:59:59)
+ * @param {Date} date 
+ * @returns {Date} a new Date object contain the new time
+ */
+const setDateEndOfDay = (date) => {
+    return setTime(date, 23, 59, 59);
+}
+
+/**
+ * Deep Copy of a JSON object.
+ * @param {JSON} obj 
+ * @returns deep copy of the object
+ */
+const deepCopyJSON = (obj) => {
+    return JSON.parse(JSON.stringify(obj));
 }
 
 module.exports = {
@@ -129,5 +160,8 @@ module.exports = {
     verifySession,
     isSkipAuth,
     getSessionInfo,
-    setTime
+    setTime,
+    setDateBeginningOfDay,
+    setDateEndOfDay,
+    deepCopyJSON
 }
