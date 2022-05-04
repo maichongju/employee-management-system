@@ -1,5 +1,7 @@
 <?php 
 session_start();
+
+
 $url=getBaseUrl();
 $vars= $_COOKIE["sIdRefreshToken"];
 $vars2= $_COOKIE["sRefreshToken"];
