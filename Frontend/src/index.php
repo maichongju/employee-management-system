@@ -64,6 +64,7 @@ function getBaseUrl(){
  var_dump($_SESSION["ID"]);
  var_dump($_SESSION["role"]);
 curl_close($ch);
+header("Location: http://localhost:8000/profile.php");
 //var_dump($html);
 exit();
 //}

@@ -1,14 +1,65 @@
-
 <?php 
+session_start();
 
+$url=getBaseUrl();
+$vars= $_COOKIE["sIdRefreshToken"];
+$vars2= $_COOKIE["sRefreshToken"];
+$vars3= $_COOKIE["sAccessToken"];
+$vars4=$_COOKIE["PHPSESSID"];
+
+
+$curl = curl_init($url);
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_VERBOSE, 1); 
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+$headers = array(
+    "Cookie: sIdRefreshToken" . $vars . 
+    "; sRefreshToken" . $vars2 . 
+    "; sAccessToken" . $vars3
+     ."; PHPSESSID=". $vars4);
+//var_dump($headers);
+//curl_setopt($curl, CURLOPT_HEADER, TRUE);
+curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+$resp = curl_exec($curl);
+$resp=json_decode($resp);
+//$resp=($resp->content);
+//$_SESSION["name"]=($resp->first_name)." ".($resp->last_name);
+
+//var_dump($resp);
+curl_close($curl);
+//exit();
+
+
+function getBaseUrl(){
+    $host_ip = getenv('BACKEND_IP');
+    $port = '3000';
+    $id = 1;
+    $base_url = 'http://'.$host_ip.':'.$port.'/schedule';
+    //echo($base_url);
+    return $base_url;
+}
+
+$fh = fopen('ScheduleIndividualtxt.txt','r');
+$data_read = file_get_contents('ScheduleIndividualtxt.txt');
+ 
+  $data_read=json_decode($data_read);
+  $schedule=($data_read->content->schedule);
+
+ // var_dump($schedule);
+
+fclose($fh);
+//exit();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Calendar
-    </title>
+    <title>DASHMIN - Bootstrap Admin Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -34,11 +85,6 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/default.css">
-
-<link rel="stylesheet" href="css/default.date.css">
-
-<link rel="stylesheet" href="css/default.time.css">
 </head>
 
 <body>
@@ -64,7 +110,7 @@
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0"><?php echo $_SESSION["name"]; ?></h6>
+                        <h6 class="mb-0"><?php echo $_SESSION["name"] ;?></h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -74,7 +120,7 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Details</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="http://localhost:8000/profile.php" class="dropdown-item">Profile</a>
-                            <a href="http://localhost:8000/calendar.php" class="dropdown-item">Schedule</a>
+                            <a href="http://localhost:8000/schedule.php" class="dropdown-item">Schedule</a>
                             <a href="http://localhost:8000/eval.php" class="dropdown-item">Evaluation</a>
                         </div>
                     </div>
@@ -87,10 +133,7 @@
                     </div>
                     
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Salary slip</a>
-                    <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                   
+                    
                 </div>
             </nav>
         </div>
@@ -177,7 +220,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex">Conner Rocky</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -190,27 +233,65 @@
             <!-- Navbar End -->
 
 
-            <!-- Chart Start -->
-            <div class="container-fluid pt-4 px-4"style="height: 80%">
-                
-                    
-                     
-                    
-                        <div class="h-100 bg-light rounded p-4" style="height: 80%">
-                            <div class="d-flex align-items-center justify-content-between mb-4" >
-                                <h6 class="mb-0">Calender</h6>
-                                <a href="">Show All</a>
+            <!-- Blank Start -->
+            <div class="col-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Responsive Table</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Day</th>
+                                            <th scope="col">Start Time</th>
+                                            <th scope="col">End Time</th>
+                                            <th scope="col">Total hours</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                   <?php 
+                                   $i=1;
+                                   foreach($schedule as $schedules){
+                                        $shift=$schedules;
+                                        $date=($shift->date);
+
+                                        $time1=($shift->start_time);
+                                        $time1=date("g:i a", strtotime($time1));
+
+                                        $time2=( $shift->end_time);
+                                        $time2=date("g:i a", strtotime($time2));
+
+                                        $time3=( $shift->total_time);
+                                        $time3=date("g", strtotime($time3));
+
+                                        $day=date("D", strtotime($date));
+
+                                        $date=date("d-m-Y", strtotime($date));
+                                        echo('<tr>
+                                        <th scope="row">'.$i.'</th>
+                                        <td>'.$date.'</td>
+                                        <td>'.$day.'</td>
+                                        <td>'.$time1.'</td>
+                                        <td>'.$time2.'</td>
+                                        <td>'.$time3.'</td>
+                                        <td>Member</td>
+                                    </tr>');
+                                    $i=$i+1;
+
+                                        } ?>
+                                       
+                                      
+                                    </tbody>
+                                </table>
                             </div>
-                            <div id="calender"style="height: 80%"></div>
-                            
                         </div>
-                    
-                   
-                   
-                   
-                
+                    </div>
+                </div>
             </div>
-            <!-- Chart End -->
+                   
+            <!-- Blank End -->
 
 
             <!-- Footer Start -->
@@ -220,10 +301,7 @@
                         <div class="col-12 col-sm-6 text-center text-sm-start">
                             &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
                         </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -249,6 +327,6 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-
 </body>
+
 </html>

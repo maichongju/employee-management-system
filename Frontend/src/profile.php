@@ -110,7 +110,7 @@ function getBaseUrl(){
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Details</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="http://localhost:8000/profile.php" class="dropdown-item">Profile</a>
-                            <a href="http://localhost:8000/calendar.php" class="dropdown-item">Schedule</a>
+                            <a href="http://localhost:8000/schedule.php" class="dropdown-item">Schedule</a>
                             <a href="http://localhost:8000/eval.php" class="dropdown-item">Evaluation</a>
                         </div>
                     </div>
@@ -123,10 +123,7 @@ function getBaseUrl(){
                     </div>
                     
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Salary slip</a>
-                    <a href="form.html" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                   
+                    
                 </div>
             </nav>
         </div>

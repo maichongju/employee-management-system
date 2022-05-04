@@ -1,0 +1,66 @@
+{
+  "status": 200,
+  "timestamp": "2022-05-04T04:12:40.070Z",
+  "content": {
+    "employee_id": 1000000,
+    "last_name": "rocky",
+    "first_name": "conner",
+    "email": "test@mail.com",
+    "phone_number": "123456789",
+    "hire_date": "2022-03-07T00:00:00.000Z",
+    "job_id": 1000000,
+    "manager_id": null,
+    "department_id": 1,
+    "store_id": 1,
+    "fulltime": true,
+    "role_id": 2,
+    "supertokens_user_id": "e0569d5d-5bb9-41fc-a1e7-ac5e1fd7a8f5",
+    "schedule": [
+      {
+        "employee_id": 1000000,
+        "department_id": 1,
+        "store_id": 1,
+        "date": "2022-03-19T00:00:00.000Z",
+        "start_time": "2022-03-19T15:00:00.000Z",
+        "end_time": "2022-03-19T23:00:00.000Z",
+        "total_time": "1970-01-01T08:00:00.000Z"
+      },
+      {
+        "employee_id": 1000000,
+        "department_id": 1,
+        "store_id": 1,
+        "date": "2022-03-20T00:00:00.000Z",
+        "start_time": "2022-03-20T07:00:00.000Z",
+        "end_time": "2022-03-20T15:00:00.000Z",
+        "total_time": "1970-01-01T08:00:00.000Z"
+      },
+      {
+        "employee_id": 1000000,
+        "department_id": 2,
+        "store_id": 1,
+        "date": "2022-03-14T00:00:00.000Z",
+        "start_time": "2022-03-14T07:00:00.000Z",
+        "end_time": "2022-03-14T15:00:00.000Z",
+        "total_time": "1970-01-01T08:00:00.000Z"
+      },
+      {
+        "employee_id": 1000000,
+        "department_id": 2,
+        "store_id": 1,
+        "date": "2022-03-15T00:00:00.000Z",
+        "start_time": "2022-03-15T07:00:00.000Z",
+        "end_time": "2022-03-15T15:00:00.000Z",
+        "total_time": "1970-01-01T08:00:00.000Z"
+      },
+      {
+        "employee_id": 1000000,
+        "department_id": 2,
+        "store_id": 1,
+        "date": "2022-03-16T00:00:00.000Z",
+        "start_time": "2022-03-16T07:00:00.000Z",
+        "end_time": "2022-03-16T15:00:00.000Z",
+        "total_time": "1970-01-01T08:00:00.000Z"
+      }
+    ]
+  }
+}
