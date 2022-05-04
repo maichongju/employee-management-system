@@ -5,6 +5,7 @@ const Code = require("../utils/code");
 var router = express.Router();
 const schedule = require("../utils/schedule");
 const { DateTime } = require("luxon");
+const supertokens = require("../utils/supertokens")
 
 const { PrismaClient, Prisma } = require("@prisma/client");
 const { prismaExclude } = require("prisma-exclude");
@@ -260,16 +261,17 @@ router.get("/employee/:id", async (req, res, next) => {
                             lte: end_date.toJSDate(),
                         },
                     },
+                    orderBy: [
+                        {
+                            date: "asc",
+                        },
+                        {
+                            start_time: "asc",
+                        }
+                    ]
                 },
             },
-            orderBy: [
-                {
-                    date: "asc",
-                },
-                {
-                    start_date: "asc",
-                }
-            ]
+
         });
 
         if (employee === null) {
