@@ -7,7 +7,7 @@ Return the employee that match the given criteria.
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 - **Optional**
   - <del>`employee_id`: Employee ID </del> Use [`/employee/:id`](#get-employee-detail) instead

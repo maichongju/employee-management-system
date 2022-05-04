@@ -6,7 +6,7 @@ Return the employee that match the given criteria.
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 **Data Parameters**: None
 
