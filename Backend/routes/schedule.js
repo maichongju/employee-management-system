@@ -73,6 +73,11 @@ router.param("store_id", async (req, res, next, id) => {
 
 router.get("/store/:store_id", async (req, res, next) => {
     try {
+        let sessionInfo = await supertokens.getSessionInfo(req, res);
+        if (sessionInfo === null) {
+            // Invalid session
+            return;
+        }
         if (req.store === null) {
             res.status(Code.HTTP_NOT_FOUND);
             res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
@@ -129,8 +134,11 @@ router.get("/store/:store_id", (req, res, next) => {
 
 router.get("/employee/:id", async (req, res, next) => {
     try {
-
-
+        let sessionInfo = await supertokens.getSessionInfo(req, res);
+        if (sessionInfo === null) {
+            // Invalid session
+            return;
+        }
         if (req.id === null) {
             res.status(Code.HTTP_NOT_FOUND);
             res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Employee not found"));
