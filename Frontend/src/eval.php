@@ -3,7 +3,7 @@ session_start();
 //echo $_SESSION["name"] ;
 //exit();
 $url=getBaseUrl();
-echo $url;
+//echo $url;
 $vars= $_COOKIE["sIdRefreshToken"];
 $vars2= $_COOKIE["sRefreshToken"];
 $vars3= $_COOKIE["sAccessToken"];
@@ -29,9 +29,16 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 $resp = curl_exec($curl);
 $resp=json_decode($resp);
 $resp=($resp->content);
+$skill_set=($resp->skills);
+$resp=($resp->evaluation);
+foreach($resp as $resps){
+    $eval=$resps;
+}
+$eval=($eval->skills);
 
 
-var_dump($resp);
+
+//var_dump($skill_set);
 curl_close($curl);
 //exit();
 
@@ -39,7 +46,7 @@ curl_close($curl);
 function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
-    $base_url = 'http://'.$host_ip.':'.$port."/eval/employee/".$_SESSION["ID"];
+    $base_url = 'http://'.$host_ip.':'.$port."/eval/employee/"."1000002";
     //echo($base_url);
     return $base_url;
 }
@@ -233,12 +240,31 @@ function getBaseUrl(){
             <div class="container-fluid pt-4 px-4"style="height: 100%">
                 <div class="row  bg-light rounded align-items-center  mx-0" >
                     
-                    <h6 class="mb-4">Employee Information</h6>
-                   
-                   
+                    <h6 class="mb-12">My Evaluation</h6>
+                    <dl class="row mb-0" style="height: 100%">
+                    <dt class="col-sm-4">SKILL ID</dt>
+                    <dt class="col-sm-4">SKILL NAME</dt>
+                    <dt class="col-sm-4">LEVEL</dd>
+                   <?php 
+                 foreach($eval as $evals){
+                    foreach($skill_set as $skill_sets){
+                            $skill_Name=($skill_sets->name);
+                            $skill_numb=($skill_sets->skill_id);
+                            $skill=($evals->skill_id);
+                        
+                            $level=($evals->level);
+                           if ($skill==$skill_numb){ 
+                            echo('<br><dd class="col-sm-4">'.$skill.'</dt>
+                            <dd class="col-sm-4">'.$skill_Name.'</dd>
+                            <dd class="col-sm-4">'.$level.'</dd>');
+                           }
+                    }
+
+                 }
+                   ?>
 
                                
-                                    
+                </dl>               
 
 
                 </div>
