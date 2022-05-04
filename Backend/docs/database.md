@@ -1,5 +1,4 @@
 # Database 
-The database contain all the data that is required to run the application. SQL file (`db.sql`) for creating sample database can be found in root directory.
+Database is a MYSQL database, it is using version 8.0. Following diagram contain the database schema of the project.
 
-## Relation Diagram 
-![Data Base Diagram](img/database-diagram.png)
+[![Data Base Diagram](img/EMS.png)](https://dbdiagram.io/d/6264c0e31072ae0b6ad8e759)

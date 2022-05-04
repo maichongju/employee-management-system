@@ -1,8 +1,47 @@
-version: '3.4'
-
+version: "3.8"
 services:
-  employeemanagementsystem:
-    image: employeemanagementsystem
+  php-apache:
+    container_name: php-apache
+    build: ./Frontend/
+    ports:
+      - 8000:80
+    environment:
+      BACKEND_IP: "app"
+    volumes:
+      - "./Frontend/src:/var/www/html"
+  app:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ./Backend/
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    environment:
+      - NODE_ENV: "production"
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./Backend/data:/var/lib/mysql"
+  supertoken:
+    container_name: supertoken
+    image: registry.supertokens.io/supertokens/supertokens-mysql
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_CONNECTION_URI: "mysql://supertoken:supertoken@mysql:3306"
+      MYSQL_USER: "supertoken"
+      MYSQL_PASSWORD: "supertoken"
+    ports:
+      - "3567:3567"
