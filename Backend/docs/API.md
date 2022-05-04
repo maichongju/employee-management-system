@@ -6,6 +6,8 @@ Here are the list of endpoints available in the REST API.
 - [`/weather`](API/weather.md)
 - [`/store`](API/store.md)
 - [`/auth`](API/authentication.md) Authentication
+- [`/eval`](API/eval.md)
+- [`/schedule`](API/schedule.md)
 
 ## Error Codes
 

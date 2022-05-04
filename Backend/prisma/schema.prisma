@@ -10,7 +10,7 @@ datasource db {
 model departments {
   department_id           Int                       @id @default(autoincrement()) @db.UnsignedInt
   department_name         String                    @default("") @db.Char(50)
-  depatment_skill         depatment_skill[]
+  department_skill        department_skill[]
   employee                employee[]
   sales_department_skill  sales_department_skill[]
   sales_department_target sales_department_target[]
@@ -175,7 +175,9 @@ model status_type {
 }
 
 model hoilday {
-  Column_1 Int @id @map("Column 1")
+  id   Int      @id
+  name String   @default("") @db.VarChar(50)
+  date DateTime @db.Date
 }
 
 model schedule {
@@ -183,13 +185,13 @@ model schedule {
   department_id Int         @db.UnsignedInt
   store_id      Int         @db.UnsignedInt
   date          DateTime    @db.Date
-  start_time    DateTime    @db.Time(0)
-  end_time      DateTime    @db.Time(0)
-  total_time    DateTime    @db.Time(0)
+  start_time    DateTime    @db.DateTime(0)
+  end_time      DateTime    @db.DateTime(0)
+  total_time    DateTime?   @db.Time(0)
   departments   departments @relation(fields: [department_id], references: [department_id], onDelete: NoAction, map: "FK_schedule_departments")
   employee      employee    @relation(fields: [employee_id], references: [employee_id], onDelete: NoAction, map: "FK_schedule_employee")
 
-  @@id([employee_id, department_id, date, start_time])
+  @@id([employee_id, department_id, store_id, date])
   @@index([department_id], map: "FK_schedule_departments")
 }
 
@@ -242,16 +244,6 @@ model role {
   employee  employee[]
 }
 
-model depatment_skill {
-  deparment_id Int         @db.UnsignedInt
-  skill_id     Int         @db.UnsignedInt
-  departments  departments @relation(fields: [deparment_id], references: [department_id], onDelete: Cascade, map: "FK_depatment_skill_departments")
-  skill        skill       @relation(fields: [skill_id], references: [skill_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_depatment_skill_skill")
-
-  @@id([deparment_id, skill_id])
-  @@index([skill_id], map: "FK_depatment_skill_skill")
-}
-
 model employee_performance_manager_skill {
   evaluation_id                String                       @default("'0'") @db.VarChar(36)
   skill_id                     Int                          @db.UnsignedInt
@@ -290,7 +282,7 @@ model skill {
   skill_id                           Int                                  @id @default(autoincrement()) @db.UnsignedInt
   name                               String                               @db.Char(50)
   comment                            String?                              @db.Text
-  depatment_skill                    depatment_skill[]
+  department_skill                   department_skill[]
   employee_performance_manager_skill employee_performance_manager_skill[]
   employee_skill                     employee_skill[]
   sales_department_skill             sales_department_skill[]
@@ -324,4 +316,14 @@ model sales_department_target {
 
   @@id([department_id, store_id])
   @@index([store_id], map: "FK_sales_department_target_store")
+}
+
+model department_skill {
+  department_id Int         @db.UnsignedInt
+  skill_id      Int         @db.UnsignedInt
+  departments   departments @relation(fields: [department_id], references: [department_id], onDelete: Cascade, map: "FK_depatment_skill_departments")
+  skill         skill       @relation(fields: [skill_id], references: [skill_id], onDelete: NoAction, onUpdate: NoAction, map: "FK_depatment_skill_skill")
+
+  @@id([department_id, skill_id])
+  @@index([skill_id], map: "FK_depatment_skill_skill")
 }
