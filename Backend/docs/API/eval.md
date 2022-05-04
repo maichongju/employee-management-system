@@ -15,7 +15,7 @@ Get all the performance evaluation for all the employees from a store
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 - **required**
   - `store_id`: ID of the store
@@ -216,7 +216,7 @@ Return the evaluation for an employee. If the there is no evaluation for the emp
 
 **Method**: `GET`
 
-**UTL Parameters**:
+**URL Parameters**:
 
 **Required** - `employee_id`: ID of the employee
 
