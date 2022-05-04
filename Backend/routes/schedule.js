@@ -11,9 +11,6 @@ const { prismaExclude } = require("prisma-exclude");
 const prisma = new PrismaClient();
 const exclude = prismaExclude(prisma);
 
-const STATUS_DENIED = 3;
-const STATUS_APPROVE = 2;
-const STATUS_PENDING = 1;
 
 router.param("store_id", async (req, res, next, id) => {
     try {
@@ -38,8 +35,20 @@ router.param("store_id", async (req, res, next, id) => {
                         weather: true
                     }
                 },
-                employee: true,
-                store_departments: true
+                employee: {
+                    include: {
+                        employee_skill: true
+                    }
+                },
+                store_departments: {
+                    include: {
+                        departments: {
+                            include: {
+                                department_skill: true
+                            }
+                        }
+                    }
+                }
             }
 
         });
@@ -63,53 +72,52 @@ router.param("store_id", async (req, res, next, id) => {
 });
 
 router.get("/store/:store_id", async (req, res, next) => {
-    if (req.store === null) {
-        res.status(Code.HTTP_NOT_FOUND);
-        res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
-        return;
+    try {
+        if (req.store === null) {
+            res.status(Code.HTTP_NOT_FOUND);
+            res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Store not found"));
+            return;
+        }
+
+        if (!req.query.start) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_MISSING_REQUIRE_ARGUMENT, "Missing start date parameter"));
+            return;
+        }
+
+        if (!req.query.end) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_MISSING_REQUIRE_ARGUMENT, "Missing end date parameter"));
+            return;
+        }
+
+        // Make sure start data and end date is valid
+        const start_date = DateTime.fromFormat(req.query.start, "yyyyMMdd", { zone: "utc" });
+        const end_date = DateTime.fromFormat(req.query.end, "yyyyMMdd", { zone: "utc" });
+        if (start_date.isValid === false) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid start date"));
+            return;
+        }
+        if (end_date.isValid === false) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid end date"));
+            return;
+        }
+
+        const result = await schedule.generateSchedule(
+            req.store.store_id,
+            req.store.store_departments,
+            req.store.store_hour,
+            req.store.employee,
+            req.store.city.weather,
+            start_date,
+            end_date);
+
+        res.json(respond.createRespond(result));
+    } catch (e) {
+        next(e);
     }
-
-    if (!req.query.start) {
-        res.status(Code.HTTP_BAD_REQUEST);
-        res.json(respond.createErrorRespond(Code.ERROR_MISSING_REQUIRE_ARGUMENT, "Missing start date parameter"));
-        return;
-    }
-
-    if (!req.query.end) {
-        res.status(Code.HTTP_BAD_REQUEST);
-        res.json(respond.createErrorRespond(Code.ERROR_MISSING_REQUIRE_ARGUMENT, "Missing end date parameter"));
-        return;
-    }
-
-    // Make sure start data and end date is valid
-    const start_date = DateTime.fromFormat(req.query.start, "yyyyMMdd", { zone: "utc" });
-    const end_date = DateTime.fromFormat(req.query.end, "yyyyMMdd", { zone: "utc" });
-    if (start_date.isValid === false) {
-        res.status(Code.HTTP_BAD_REQUEST);
-        res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid start date"));
-        return;
-    }
-    if (end_date.isValid === false) {
-        res.status(Code.HTTP_BAD_REQUEST);
-        res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid end date"));
-        return;
-    }
-
-    const off_request = await getEmployeeOffRequest(
-        req.store.employee,
-        start_date.toJSDate(),
-        end_date.toJSDate());
-
-    const result = schedule.generateSchedule(
-        req.store.store_departments,
-        req.store.store_hour,
-        req.store.employee,
-        req.store.city.weather,
-        off_request,
-        start_date);
-
-    res.json(respond.createRespond(result));
-
 });
 
 router.get("/store/:store_id", (req, res, next) => {
@@ -119,27 +127,81 @@ router.get("/store/:store_id", (req, res, next) => {
     );
 });
 
-/**
- * Database helper function to get all the employee off request
- * @param {*} employees list of employee id
- * @returns 
- */
-const getEmployeeOffRequest = async (employees, start_date, end_date) => {
-    const employee_off_request = await prisma.time_off_request.findMany({
-        where: {
-            employee_id: {
-                in: employees.map(item => item.employee_id)
-            },
-            off_date: {
-                gte: start_date,
-                lte:end_date
-            },
-            status_id: STATUS_APPROVE
+router.get("/employee/:id", async (req, res, next) => {
+    try {
 
+
+        if (req.id === null) {
+            res.status(Code.HTTP_NOT_FOUND);
+            res.json(respond.createErrorRespond(Code.ERROR_NOT_FOUND, "Employee not found"));
+            return;
         }
-    });
 
-    return employee_off_request;
-}
+        if (!req.query.start) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_MISSING_REQUIRE_ARGUMENT, "Missing start date parameter"));
+            return;
+        }
+
+        if (!req.query.end) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_MISSING_REQUIRE_ARGUMENT, "Missing end date parameter"));
+            return;
+        }
+
+
+        const start_date = DateTime.fromFormat(req.query.start, "yyyyMMdd", { zone: "utc" });
+        const end_date = DateTime.fromFormat(req.query.end, "yyyyMMdd", { zone: "utc" });
+        if (start_date.isValid === false) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid start date"));
+            return;
+        }
+        if (end_date.isValid === false) {
+            res.status(Code.HTTP_BAD_REQUEST);
+            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Invalid end date"));
+            return;
+        }
+
+        const employee = await prisma.employee.findUnique({
+            where: {
+                employee_id: Number(req.params.id)
+            },
+            include: {
+                schedule: {
+                    where: {
+                        date: {
+                            gte: start_date.toJSDate(),
+                            lte: end_date.toJSDate()
+                        }
+                    }
+                }
+            }
+        });
+
+        if (employee === null) {
+            res.status(Code.HTTP_NOT_FOUND);
+            res.json(respond.createErrorRespond(Code.ERROR_INVALID_ARGUMENT, "Employee not found"));
+            return;
+        }
+        res.json(respond.createRespond(employee));
+    } catch (e) {
+        next(e);
+    }
+})
+
+router.all("/store/:store_id", async (req, res, next) => {
+    res.status(Code.HTTP_METHOD_NOT_ALLOWED);
+    res.json(
+        createErrorRespond(Code.ERROR_HTTP_METHOD_NOT_ALLOW, "http method not allowed", null, Code.HTTP_METHOD_NOT_ALLOWED)
+    );
+});
+
+router.all("/employee/:id", async (req, res, next) => {
+    res.status(Code.HTTP_METHOD_NOT_ALLOWED);
+    res.json(
+        createErrorRespond(Code.ERROR_HTTP_METHOD_NOT_ALLOW, "http method not allowed", null, Code.HTTP_METHOD_NOT_ALLOWED)
+    );
+});
 
 module.exports = router;

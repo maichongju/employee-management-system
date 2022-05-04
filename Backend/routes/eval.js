@@ -185,9 +185,9 @@ const processSales = async (store_id, start_date, end_date = undefined) => {
     }
 
     // Start date always will start at midnight
-    utils.setTime(start_date, 0, 0, 0);
+    start_date = utils.setTime(start_date, 0, 0, 0);
     // End date always will end at midnight
-    utils.setTime(end_date, 23, 59, 59);
+    end_date = utils.setTime(end_date, 23, 59, 59);
 
     const sales = await getSales(store_id, start_date, end_date);
     const departments = await getDepartments(store_id, start_date, end_date);
@@ -435,7 +435,7 @@ const getEmployeeFromStore = async (store_id) => {
  *    skill_id: number,
  *    level: number
  * } & []                 
- * } & []} data 
+ * } & []} evaluation 
  */
 const updateEmployeeSkillData = async (evaluation) => {
     for (const employee of evaluation) {
