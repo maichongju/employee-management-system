@@ -105,8 +105,8 @@ const evalByStore = async (store_id) => {
     const salesData = await processSales(store_id, new Date(2022, 2, 25), new Date(2022, 2, 27));
     const employeeID = await getEmployeeFromStore(store_id);
     const reportFormManager = await processEmployeeEvalFromManager(employeeID);
-    const evaluation = getEmployeeEvaluation(salesData, reportFormManager, employeeID);
-    await updateEmployeeSkillData(evaluation);
+    const evaluation = await getEmployeeEvaluation(salesData, reportFormManager, employeeID);
+    await updateEmployeeSkillData(evaluation.evaluation);
     return evaluation;
 }
 
@@ -120,9 +120,9 @@ const evalEmployee = async (employee_id, store_id) => {
     const salesData = await processSales(store_id, new Date(2022, 2, 25), new Date(2022, 2, 27));
     const employeeID = [employee_id];
     const reportFormManager = await processEmployeeEvalFromManager(employeeID);
-    const evaluation = getEmployeeEvaluation(salesData, reportFormManager, employeeID);
-    await updateEmployeeSkillData(evaluation);
-    return evaluation[0];
+    const evaluation = await getEmployeeEvaluation(salesData, reportFormManager, employeeID);
+    await updateEmployeeSkillData(evaluation.evaluation);
+    return evaluation;
 }
 
 /**
@@ -134,8 +134,9 @@ const evalEmployee = async (employee_id, store_id) => {
  * @param {{}} reportFromManager 
  * @param {[number]} employeeID Employee ID from the store
  */
-const getEmployeeEvaluation = (salesData, reportFromManager, employeeID) => {
+const getEmployeeEvaluation = async (salesData, reportFromManager, employeeID) => {
     const evaluation = [];
+    const skillIDs = [];
     for (const id of employeeID) {
         let individualEvaluation = {
             employee_id: id,
@@ -167,10 +168,20 @@ const getEmployeeEvaluation = (salesData, reportFromManager, employeeID) => {
                 skill_id: Number(skillID),
                 level: tempSkill[skillID]
             })
+            if (!skillIDs.includes(Number(skillID))) {
+                skillIDs.push(Number(skillID));
+            }
         }
         evaluation.push(individualEvaluation);
     }
-    return evaluation;
+        const skills = await getSkillNames(skillIDs);
+        console.log(evaluation);
+        const result = {
+            evaluation: evaluation,
+            skills: skills
+        }
+
+    return result;
 }
 
 /**
@@ -438,6 +449,7 @@ const getEmployeeFromStore = async (store_id) => {
  * } & []} evaluation 
  */
 const updateEmployeeSkillData = async (evaluation) => {
+    console.log(evaluation);
     for (const employee of evaluation) {
         let employee_id = employee.employee_id;
         for (const skill of employee.skills) {
@@ -463,6 +475,25 @@ const updateEmployeeSkillData = async (evaluation) => {
             })
         }
     }
+}
+
+/**
+ * Get the skill name from the skill id
+ * @param {number[]} skillIDs 
+ */
+const getSkillNames = async (skillIDs) => {
+    const names = await prisma.skill.findMany({
+        where : {
+            skill_id: {
+                in: skillIDs
+            }
+        },
+        select:{
+            skill_id: true,
+            name: true
+        }
+    })
+    return names;
 }
 
 // Mock the eval endpoint

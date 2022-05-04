@@ -1,143 +1,43 @@
 <?php
-session_start();
 function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
-    $base_url = 'http://'.$host_ip.':'.$port."/auth/signin";
+    $base_url = 'http://'.$host_ip.':'.$port."/auth/signup";
     //echo($base_url);
     return $base_url;
 }
 
-//function setCookies(){
+//function signUp(){
 
         $data = array(
             "username"=> "user",
-            "password"=> "password"
+            "password"=> "password",
+            "employeeID"=> "1000000",
         );
 
     $ch= curl_init(getBaseUrl());
+ 
     curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_COOKIEJAR, './cookies.txt');
-    curl_setopt($ch, CURLOPT_COOKIEFILE, './cookies.txt');
+    curl_setopt($ch, CURLINFO_HEADER_OUT, true);
     curl_setopt($ch, CURLOPT_COOKIESESSION, 1);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-
-
-    $html= curl_exec($ch);
-    $skip = intval(curl_getinfo($ch, CURLINFO_HEADER_SIZE)); 
-    $requestHeader= substr($html,0,$skip);
-    $html = substr($html,$skip);
-    $e = 0;
-        while(true){
-            $s = strpos($requestHeader,'Set-Cookie: ',$e);
-            if (!$s){break;}
-            $s += 12;
-            $e = strpos($requestHeader,';',$s);
-            $cookie = substr($requestHeader,$s,$e-$s) ;
-            $s = strpos($cookie,'=');
-            $key = substr($cookie,0,$s);
-            $value = substr($cookie,$s);
-            $cookies[$key] = $value;
-        }
-    
-    foreach ($cookies as $key => $value){
-                
-        $cookie_name=$key;
-        $cookie_value=$value;
-    
-      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
-    }
- 
-    
-       
-         $html= json_decode($html);
-         $details= ($html->content);       
-       $_SESSION["ID"]=($details->employee_id);
-       $_SESSION["role"]=($details->role);
-     
-      //  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
-  
- var_dump($_SESSION["ID"]);
- var_dump($_SESSION["role"]);
+    $result= curl_exec($ch);
+   var_dump($result);
 curl_close($ch);
-//var_dump($html);
 exit();
 //}
-
-
-// function settingCook(){
-//     $i=0;
-//     $content=file('./cookies.txt');
-//     $cookiesArr=extractCookies($content);
-// var_dump($cookiesArr);
-
-//         foreach ($cookiesArr as $line){
-//             $name = array_column($cookiesArr, 'name');
-//             $value = array_column($cookiesArr, 'value');
-//         }
-
-       
-// }
-
-
-// function extractCookies($lines) {
-//   var_dump($string);
-//   $cookiesArr=array();
-//    foreach($lines as $line) {
-   
-//         $cookie = array();
-
-//         detect httponly cookies and remove #HttpOnly prefix
-//         if (substr($line, 0, 10) == '#HttpOnly_') {
-//             $line = substr($line, 10);
-//            $cookie['httponly'] = true;
-//         } else {
-//            $cookie['httponly'] = false;
-//         } 
-
-//         we only care for valid cookie def lines
-//         if( strlen( $line ) > 0 && $line[0] != '#' && substr_count($line, "\t") == 6) {
-
-//             get tokens in an array
-//             $tokens = explode("\t", $line);
-
-//             trim the tokens
-//             $tokens = array_map('trim', $tokens);
-
-           
-//             $cookie['name'] = urldecode($tokens[5]);   // The name of the variable.
-//             $cookie['value'] = urldecode($tokens[6]);  // The value of the variable.
-
-//             Convert date to a readable format
-
-//             Record the cookie.
-//             $cookies[]= $cookie;
-//            var_dump($cookies);
-           
-           
-//         }
-        
-    
-//     }
-//     var_dump($cookies);
-//     return $cookies;
-   
-// }
-
-
-
-// exit();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>Sign Up</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -185,7 +85,7 @@ exit();
                             <a href="index.html" class="">
                                 <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>EMS</h3>
                             </a>
-                            <h3>Sign In</h3>
+                            <h3>Sign Up</h3>
                         </div>
                         <div class="form-floating mb-3">
                         <form class="login" name="loginForm" onsubmit="return returnvalidateLoginForm()" >
@@ -196,13 +96,14 @@ exit();
                             <input type="password" class="form-control" name="floatingPassword" id="floatingPassword" placeholder="Password">
                             <label for="floatingPassword">Password</label>
                         </div>
-                        <div class="d-flex align-items-center justify-content-between mb-4">
-                            
-                            <a href="http://localhost:8000/signup.php">Sign Up</a>
+                        <div class="form-floating mb-4">
+                            <input type="empid" class="form-control" name="floatingEmpid" id="floatingEmpid" placeholder="Employee ID">
+                            <label for="floatingPassword">Employee ID</label>
                         </div>
-                        <button type="submit" value= "login" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
+       
+                        <button type="submit" value= "login" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
                        </form>
-                        
+                       <p class="text-center mb-0">Already have an Account? <a href="http://localhost:8000/signup.php">Sign In</a></p>
                     </div>
                 </div>
             </div>
