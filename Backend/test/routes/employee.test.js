@@ -13,10 +13,10 @@ describe("GET /store log in employee", () => {
             .end(done);
     })
     it("valid store number", (done) => {
-        agent.get("/store/1")
+        agent.get("/employee/1")
             .expect(200)
             .expect((res) => {
-                expect(res.body.content.store_id).toBe(1)
+                expect(res.body.content.employee_id).toBe(1)
             })
             .end(done);
 
@@ -39,10 +39,10 @@ describe("GET /store log in employee", () => {
             .end(done);
     })
     it("bad store number", (done) => {
-        agent.get("/store/#")
+        agent.get("/employee/#")
             .expect(400)
             .expect((res) => {
-                expect(res.body.content.store_id).toBe(400)
+                expect(res.body.content.employee_id).toBe(400)
             })
             .end(done);
 
@@ -59,7 +59,7 @@ describe("GET /store log in employee", () => {
 
 describe("GET /store no log in", () => {
     it("valid store number no auth", (done) => {
-        agent.get("/store/1")
+        agent.get("/employee/1")
             .expect(401)
             .expect((res) => {
                 expect(res.body.status).toBe(401);
@@ -79,10 +79,10 @@ describe("GET /store log in employee", () => {
             .end(done);
     })
     it("unfound store number", (done) => {
-        agent.get("/store/0012")
+        agent.get("/employee/0012")
             .expect(404)
             .expect((res) => {
-                expect(res.body.content.store_id).toBe(404)
+                expect(res.body.content.employee_id).toBe(404)
             })
             .end(done);
 
