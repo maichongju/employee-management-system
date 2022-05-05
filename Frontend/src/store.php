@@ -109,6 +109,9 @@ function getBaseUrl(){
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Details</a>
                         <div class="dropdown-menu bg-transparent border-0">
+                        <?php if ($_SESSION["role"]==2) {
+                           echo('<a href="http://localhost:8000/employeelist.php" class="dropdown-item">All Employees</a>');
+                                 }?>
                             <a href="http://localhost:8000/profile.php" class="dropdown-item">Profile</a>
                             <a href="http://localhost:8000/schedule.php" class="dropdown-item">Schedule</a>
                             <a href="http://localhost:8000/eval.php" class="dropdown-item">Evaluation</a>
@@ -117,8 +120,10 @@ function getBaseUrl(){
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Time-off</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="" class="dropdown-item">Request Time-off</a>
-                            <a href="" class="dropdown-item">Approve Time-off</a>
+                            <a href="signin.html" class="dropdown-item">Request Time-off</a>
+                            <?php if ($_SESSION["role"]==2) {
+                           echo('<a href="signup.html" class="dropdown-item">Approve Time-off</a>');
+                        }?>
                         </div>
                     </div>
                     
@@ -215,7 +220,7 @@ function getBaseUrl(){
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
+                            <a href="http://localhost:8000/logout.php" class="dropdown-item">Log Out</a>
                         </div>
                     </div>
                 </div>

@@ -1,138 +1,3 @@
-<?php
-session_start();
-function getBaseUrl(){
-    $host_ip = getenv('BACKEND_IP');
-    $port = '3000';
-    $base_url = 'http://'.$host_ip.':'.$port."/auth/signin";
-    //echo($base_url);
-    return $base_url;
-}
-
-//function setCookies(){
-
-        $data = array(
-            "username"=> "user",
-            "password"=> "password"
-        );
-
-    $ch= curl_init(getBaseUrl());
-    curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_COOKIEJAR, './cookies.txt');
-    curl_setopt($ch, CURLOPT_COOKIEFILE, './cookies.txt');
-    curl_setopt($ch, CURLOPT_COOKIESESSION, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-
-
-    $html= curl_exec($ch);
-    $skip = intval(curl_getinfo($ch, CURLINFO_HEADER_SIZE)); 
-    $requestHeader= substr($html,0,$skip);
-    $html = substr($html,$skip);
-    $e = 0;
-        while(true){
-            $s = strpos($requestHeader,'Set-Cookie: ',$e);
-            if (!$s){break;}
-            $s += 12;
-            $e = strpos($requestHeader,';',$s);
-            $cookie = substr($requestHeader,$s,$e-$s) ;
-            $s = strpos($cookie,'=');
-            $key = substr($cookie,0,$s);
-            $value = substr($cookie,$s);
-            $cookies[$key] = $value;
-        }
-    
-    foreach ($cookies as $key => $value){
-                
-        $cookie_name=$key;
-        $cookie_value=$value;
-    
-      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
-    }
- 
-    
-       
-         $html= json_decode($html);
-         $details= ($html->content);       
-       $_SESSION["ID"]=($details->employee_id);
-       $_SESSION["role"]=($details->role);
-     
-      //  setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
-  
- var_dump($_SESSION["ID"]);
- var_dump($_SESSION["role"]);
-curl_close($ch);
-//header("Location: http://localhost:8000/profile.php");
-//var_dump($html);
-exit();
-//}
-
-
-// function settingCook(){
-//     $i=0;
-//     $content=file('./cookies.txt');
-//     $cookiesArr=extractCookies($content);
-// var_dump($cookiesArr);
-
-//         foreach ($cookiesArr as $line){
-//             $name = array_column($cookiesArr, 'name');
-//             $value = array_column($cookiesArr, 'value');
-//         }
-
-       
-// }
-
-
-// function extractCookies($lines) {
-//   var_dump($string);
-//   $cookiesArr=array();
-//    foreach($lines as $line) {
-   
-//         $cookie = array();
-
-//         detect httponly cookies and remove #HttpOnly prefix
-//         if (substr($line, 0, 10) == '#HttpOnly_') {
-//             $line = substr($line, 10);
-//            $cookie['httponly'] = true;
-//         } else {
-//            $cookie['httponly'] = false;
-//         } 
-
-//         we only care for valid cookie def lines
-//         if( strlen( $line ) > 0 && $line[0] != '#' && substr_count($line, "\t") == 6) {
-
-//             get tokens in an array
-//             $tokens = explode("\t", $line);
-
-//             trim the tokens
-//             $tokens = array_map('trim', $tokens);
-
-           
-//             $cookie['name'] = urldecode($tokens[5]);   // The name of the variable.
-//             $cookie['value'] = urldecode($tokens[6]);  // The value of the variable.
-
-//             Convert date to a readable format
-
-//             Record the cookie.
-//             $cookies[]= $cookie;
-//            var_dump($cookies);
-           
-           
-//         }
-        
-    
-//     }
-//     var_dump($cookies);
-//     return $cookies;
-   
-// }
-
-
-
-// exit();
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -189,8 +54,8 @@ exit();
                             <h3>Sign In</h3>
                         </div>
                         <div class="form-floating mb-3">
-                        <form class="login" name="loginForm" onsubmit="return returnvalidateLoginForm()" >
-                            <input type="email" class="form-control" name="floatingInput" id="floatingInput" placeholder="name@example.com">
+                        <form class="login" name="loginForm" method="post" action=login.php onsubmit="return returnvalidateLoginForm()" >
+                            <input type="text" class="form-control" name="floatingInput" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
                         </div>
                         <div class="form-floating mb-4">
@@ -229,7 +94,7 @@ exit();
     function returnvalidateLoginForm(){
     var uname = document.getElementById("floatingInput").value;
 		var pwd = document.getElementById("floatingPassword").value;
-		var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	//	var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 		if(uname =='')
 		{
 			alert("please enter user name.");

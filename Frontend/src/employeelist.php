@@ -1,6 +1,7 @@
 <?php 
 session_start();
-function fetchSchedule(){
+
+
 $url=getBaseUrl();
 $vars= $_COOKIE["sIdRefreshToken"];
 $vars2= $_COOKIE["sRefreshToken"];
@@ -26,42 +27,29 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
 $resp = curl_exec($curl);
 $resp=json_decode($resp);
-//$resp=($resp->content);
+$resp=($resp->content);
 //$_SESSION["name"]=($resp->first_name)." ".($resp->last_name);
-$schedule=($resp->content->schedule);
-displaySchedule($schedule);
+
 //var_dump($resp);
 curl_close($curl);
 //exit();
-}
 
 
 function getBaseUrl(){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
-    $id = 1;
-    $base_url = 'http://'.$host_ip.':'.$port.'/schedule/employee/'.$_SESSION["ID"]."?start=20220314&end=20220320";
+    $base_url = 'http://'.$host_ip.':'.$port."/employee";
     //echo($base_url);
     return $base_url;
 }
 
-/*$fh = fopen('ScheduleIndividualtxt.txt','r');
-$data_read = file_get_contents('ScheduleIndividualtxt.txt');
- 
-  $data_read=json_decode($data_read);
-  $schedule=($data_read->content->schedule);
-
-// var_dump($schedule);
-
-fclose($fh);
-exit();*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>schedule</title>
+    <title>Profile</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -121,7 +109,7 @@ exit();*/
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Details</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                        <?php if ($_SESSION["role"]==2) {
+                            <?php if ($_SESSION["role"]==2) {
                            echo('<a href="http://localhost:8000/employeelist.php" class="dropdown-item">All Employees</a>');
                                  }?>
                             <a href="http://localhost:8000/profile.php" class="dropdown-item">Profile</a>
@@ -243,67 +231,42 @@ exit();*/
             <!-- Blank Start -->
             <div class="col-12">
                         <div class="bg-light rounded h-100 p-4">
-                        <form class="d-none d-md-flex ms-4" method="post" action=getschedule.php>
-                         <label for="start">Start date:</label>
-                       
-                         <input class="form-control border-0" type="date" name="start" value="2022-03-14" min="2018-01-01" max="2023-12-31" style="width:25%">
-                
-                         <label for="start">End date:</label>
                         
-                   
-                         <input class="form-control border-0" type="date" name="end" value="2022-03-20" min="2018-01-01" max="2023-12-31" style="width:25%">
-                         <button type="submit" value="click" class="btn btn-primary m-2" name="submit">Show Schedule</button>
-                        
-                         </form>
 
                
-                            <h6 class="mb-4">My Schedule</h6>
+                            <h6 class="mb-4">Employee List</h6>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Day</th>
-                                            <th scope="col">Start Time</th>
-                                            <th scope="col">End Time</th>
-                                            <th scope="col">Total hours</th>
+                                            <th scope="col">Employee ID</th>
+                                            <th scope="col">First Name</th>
+                                            <th scope="col">Last Name</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Department</th>
                                             <th scope="col">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         
                                    <?php
-                                   function displaySchedule($schedule) {
+                                   
                                    $i=1;
-                                   foreach($schedule as $schedules){
-                                        $shift=$schedules;
-                                        $date=($shift->date);
-
-                                        $time1=($shift->start_time);
-                                        $time1=date("g:i a", strtotime($time1));
-
-                                        $time2=( $shift->end_time);
-                                        $time2=date("g:i a", strtotime($time2));
-
-                                        $time3=( $shift->total_time);
-                                        $time3=date("g", strtotime($time3));
-
-                                        $day=date("D", strtotime($date));
-
-                                        $date=date("d-m-Y", strtotime($date));
+                                   foreach($resp as $resps){
+                                       
                                         echo('<tr>
                                         <th scope="row">'.$i.'</th>
-                                        <td>'.$date.'</td>
-                                        <td>'.$day.'</td>
-                                        <td>'.$time1.'</td>
-                                        <td>'.$time2.'</td>
-                                        <td>'.$time3.'</td>
-                                        <td>Member</td>
+                                        <td>'.$resps->employee_id.'</td>
+                                        <td>'.$resps->first_name.'</td>
+                                        <td>'.$resps->last_name.'</td>
+                                        <td>'.$resps->job->job_title.'</td>
+                                        <td>'.$resps->department->department_name.'</td>
+                                        <td>Active</td>
                                     </tr>');
                                     $i=$i+1;
 
-                                        } 
+                                        
                                     }?>
                                        
                                       
@@ -314,7 +277,6 @@ exit();*/
                     </div>
                 </div>
             </div>
-                   
             <!-- Blank End -->
 
 

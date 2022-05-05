@@ -1,7 +1,14 @@
-<?php 
+<?php
 session_start();
-function fetchSchedule(){
-$url=getBaseUrl();
+
+
+    $start=$_POST["start"];
+    $start = str_replace('-"', '', $start);  
+    $start = date("Ymd", strtotime($start));  
+    $end=$_POST["end"];
+    $end = str_replace('-"', '', $end);  
+    $end = date("Ymd", strtotime($end)); 
+$url=getBaseUrl($start,$end);
 $vars= $_COOKIE["sIdRefreshToken"];
 $vars2= $_COOKIE["sRefreshToken"];
 $vars3= $_COOKIE["sAccessToken"];
@@ -26,42 +33,29 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 
 $resp = curl_exec($curl);
 $resp=json_decode($resp);
-//$resp=($resp->content);
-//$_SESSION["name"]=($resp->first_name)." ".($resp->last_name);
+
 $schedule=($resp->content->schedule);
-displaySchedule($schedule);
-//var_dump($resp);
+
 curl_close($curl);
 //exit();
-}
 
 
-function getBaseUrl(){
+
+function getBaseUrl($start,$end){
     $host_ip = getenv('BACKEND_IP');
     $port = '3000';
     $id = 1;
-    $base_url = 'http://'.$host_ip.':'.$port.'/schedule/employee/'.$_SESSION["ID"]."?start=20220314&end=20220320";
+    $base_url = 'http://'.$host_ip.':'.$port.'/schedule/employee/'.$_SESSION["ID"]."?start=".$start."&end=".$end;
     //echo($base_url);
     return $base_url;
 }
-
-/*$fh = fopen('ScheduleIndividualtxt.txt','r');
-$data_read = file_get_contents('ScheduleIndividualtxt.txt');
- 
-  $data_read=json_decode($data_read);
-  $schedule=($data_read->content->schedule);
-
-// var_dump($schedule);
-
-fclose($fh);
-exit();*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>schedule</title>
+    <title>Schedule</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -246,35 +240,49 @@ exit();*/
                         <form class="d-none d-md-flex ms-4" method="post" action=getschedule.php>
                          <label for="start">Start date:</label>
                        
-                         <input class="form-control border-0" type="date" name="start" value="2022-03-14" min="2018-01-01" max="2023-12-31" style="width:25%">
+                         <input class="form-control border-0" type="date" name="start" value="2018-07-22" min="2018-01-01" max="2018-12-31" style="width:25%">
                 
                          <label for="start">End date:</label>
                         
                    
-                         <input class="form-control border-0" type="date" name="end" value="2022-03-20" min="2018-01-01" max="2023-12-31" style="width:25%">
+                         <input class="form-control border-0" type="date" name="end" value="2018-07-22" min="2018-01-01" max="2018-12-31" style="width:25%">
                          <button type="submit" value="click" class="btn btn-primary m-2" name="submit">Show Schedule</button>
                         
                          </form>
 
                
                             <h6 class="mb-4">My Schedule</h6>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Day</th>
-                                            <th scope="col">Start Time</th>
-                                            <th scope="col">End Time</th>
-                                            <th scope="col">Total hours</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        
+                           
                                    <?php
-                                   function displaySchedule($schedule) {
+                                  // function displaySchedule($schedule) {
+                                      if (empty($schedule)){
+                                      echo("  <div class='container-fluid pt-4 px-4'>
+                                        <div class='row vh-100 bg-light rounded align-items-center justify-content-center mx-0'>
+                                            <div class='col-md-6 text-center'>
+                                                <h3>No Schedule to Show</h3>
+                                            </div>
+                                        </div>
+                                    </div>");
+                                      }
+                                      else
+                                      {
+                                          echo(
+                                           ' <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Day</th>
+                                                        <th scope="col">Start Time</th>
+                                                        <th scope="col">End Time</th>
+                                                        <th scope="col">Total hours</th>
+                                                        <th scope="col">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>'
+                                                    
+                                          );
                                    $i=1;
                                    foreach($schedule as $schedules){
                                         $shift=$schedules;
@@ -292,7 +300,8 @@ exit();*/
                                         $day=date("D", strtotime($date));
 
                                         $date=date("d-m-Y", strtotime($date));
-                                        echo('<tr>
+                                        echo(' 
+                                        <tr>
                                         <th scope="row">'.$i.'</th>
                                         <td>'.$date.'</td>
                                         <td>'.$day.'</td>

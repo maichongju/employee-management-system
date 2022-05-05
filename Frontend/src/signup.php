@@ -1,37 +1,3 @@
-<?php
-function getBaseUrl(){
-    $host_ip = getenv('BACKEND_IP');
-    $port = '3000';
-    $base_url = 'http://'.$host_ip.':'.$port."/auth/signup";
-    //echo($base_url);
-    return $base_url;
-}
-
-//function signUp(){
-
-        $data = array(
-            "username"=> "user",
-            "password"=> "password",
-            "employeeID"=> "1000000",
-        );
-
-    $ch= curl_init(getBaseUrl());
- 
-    curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-    curl_setopt($ch, CURLOPT_COOKIESESSION, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-    $result= curl_exec($ch);
-   var_dump($result);
-curl_close($ch);
-exit();
-//}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -88,8 +54,8 @@ exit();
                             <h3>Sign Up</h3>
                         </div>
                         <div class="form-floating mb-3">
-                        <form class="login" name="loginForm" onsubmit="return returnvalidateLoginForm()" >
-                            <input type="email" class="form-control" name="floatingInput" id="floatingInput" placeholder="name@example.com">
+                        <form class="login" name="loginForm" method="post" action=addsignup.php  onsubmit="return returnvalidateLoginForm()" >
+                            <input type="text" class="form-control" name="floatingInput" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput">Email address</label>
                         </div>
                         <div class="form-floating mb-4">
@@ -103,7 +69,7 @@ exit();
        
                         <button type="submit" value= "login" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
                        </form>
-                       <p class="text-center mb-0">Already have an Account? <a href="http://localhost:8000/signup.php">Sign In</a></p>
+                       <p class="text-center mb-0">Already have an Account? <a href="http://localhost:8000/index.php">Sign In</a></p>
                     </div>
                 </div>
             </div>
