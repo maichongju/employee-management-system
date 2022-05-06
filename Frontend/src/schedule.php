@@ -140,6 +140,7 @@ exit();*/
                     </div>
                     
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Salary slip</a>
+                    <a href="http://localhost:8000/store.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Store details</a>
                     
                 </div>
             </nav>
