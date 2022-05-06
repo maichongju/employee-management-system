@@ -20,3 +20,4 @@ Unzip the `backend/data.zip` file and make sure the unzipped file is located in 
 1. Open a terminal and ensure that you are in the root directory of the project.
 2. `docker-compose up` starts the program.
 3. Access the program at [http://localhost:8080](http://localhost:8080)
+4. Use default the following account to login (username: user, password: password)
