@@ -111,7 +111,7 @@ function getBaseUrl($start,$end){
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="#" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Details</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -133,7 +133,7 @@ function getBaseUrl($start,$end){
                         </div>
                     </div>
                     
-                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Salary slip</a>
+                    <a href="#" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Salary slip</a>
                     <a href="http://localhost:8000/store.php" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Store details</a>
                     
                 </div>
@@ -333,7 +333,7 @@ function getBaseUrl($start,$end){
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
+                            &copy; <a href="#"></a>
                         </div>
                         
                     </div>
