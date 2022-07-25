@@ -1,6 +1,6 @@
 # Employee Management System
 
-Employee Management System is a web application that allows employee schedule be auto generated. The program is split into two parts: frontend and backend. The backend is a REST API server that handles all the requests from the frontend. Where the frontend can be any client that sent the request to the backend endpoint.
+Employee Management System is a web application that can automatically generate employee schedule. The program is split into two parts: frontend and backend. The backend is a REST API server that handles all the requests from the frontend and the frontend can be any client that sent the request to the backend endpoint.
 
 - Backend API detail [API.md](Backend/docs/API.md)
 - Backend Database detail [Database.md](Backend/docs/Database.md)
